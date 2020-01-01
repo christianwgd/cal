@@ -16,8 +16,8 @@ CONTENT_STATUS_CHOICES = (
 class Category(models.Model):
 
     class Meta:
-        verbose_name = _('Event category')
-        verbose_name_plural = _('Event categories')
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
 
     def __str__(self):
         return self.name

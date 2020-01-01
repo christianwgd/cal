@@ -6,7 +6,7 @@ from event.models import Event, Category, Calendar, Location
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
 
-    list_display = ['name',]
+    list_display = ['name', 'slug']
     exclude = ['slug',]
     search_fields = ['name']
 
@@ -14,14 +14,14 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
 
-    list_display = ['name',]
+    list_display = ['name', 'slug']
     exclude = ['slug',]
 
 
 @admin.register(Calendar)
 class CalendarAdmin(admin.ModelAdmin):
 
-    list_display = ['name',]
+    list_display = ['name', 'slug']
     exclude = ['slug', ]
     autocomplete_fields = ['categories']
 
