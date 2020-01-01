@@ -121,6 +121,6 @@ STATIC_URL = '/static/'
 
 BOOTSTRAP4 = {
     'javascript_in_head': True,
-    #'theme_url': '/static/css/bootstrap.min.css',
+    'theme_url': '/static/css/bootstrap.min.css',
 }
 

@@ -110,7 +110,7 @@ class Event(models.Model):
         Location, on_delete=models.PROTECT, verbose_name=_('Location'),
         blank=True, null=True
     )
-    status = models.IntegerField(
+    state = models.IntegerField(
         verbose_name=_('State'),
         choices=CONTENT_STATUS_CHOICES, default=CONTENT_STATUS_PUBLISHED,
         help_text=_("With Draft chosen, will only be shown for admin users on the site.")

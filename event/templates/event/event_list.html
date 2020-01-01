@@ -4,22 +4,43 @@
 {% block bootstrap4_extra_head %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% static "css/event.css" %}" />
+
+<link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/packages/core/main.css' %}" media="all">
+<link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/packages/bootstrap/main.css' %}" media="all">
+<link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/packages/daygrid/main.css' %}" media="all">
+
+<script src="{% static 'fullcalendar/packages/core/main.js' %}"></script>
+<script src="{% static 'fullcalendar/packages/bootstrap/main.js' %}"></script>
+<script src="{% static 'fullcalendar/packages/daygrid/main.js' %}"></script>
+<script src="{% static 'fullcalendar/packages/core/locales/de.js' %}"></script>
+
+<script>
+$(document).ready(function(){
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: [ 'dayGrid', 'bootstrap' ],
+        locales: [ 'deLocale' ],
+        locale: 'de',
+        events: {
+            url: '/event/json',
+            failure: function () {
+                document.getElementById('script-warning').style.display = 'block'
+            }
+        },
+        eventRender: function(info) {
+            info.el.innerHTML = info.el.innerHTML.replace('$ICON', "<em class=' "+info.event.extendedProps.icon+"'></em>");
+        }
+    });
+    calendar.render();
+});
+
+</script>
 {% endblock %}
 
-{% block page_title %}{% endblock %}
+{% block page_title %}Abfuhrkalender{% endblock %}
 
 {% block content %}
-    <ul>
-    {% for event in event_list %}
-        <li>
-            {{ event.date }}
-            <span class="badge"
-                  style="color: {{ event.category.color }}; background-color: {{ event.category.bg_color }}; font-size: 1em;">
-                <i class="{{ event.calendar.icon }}"></i>
-            </span>
-            {{ event.location }}
-        </li>
-    {% endfor %}
-    </ul>
+
+    <div id='calendar'></div>
 
 {% endblock %}
