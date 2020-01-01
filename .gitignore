@@ -1,0 +1,17 @@
+# Created by .ignore support plugin (hsz.mobi)
+!requirements.txt
+!.gitignore
+.idea/
+media/
+__pycache__/
+localsettings.py
+.vscode
+*.pyc
+localsettings.py
+*.db
+log/
+*.json
+.project
+*.bak
+
+

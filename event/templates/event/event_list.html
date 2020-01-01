@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static bootstrap4 l10n i18n  %}
+
+{% block bootstrap4_extra_head %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "css/event.css" %}" />
+{% endblock %}
+
+{% block page_title %}{% endblock %}
+
+{% block content %}
+    <ul>
+    {% for event in event_list %}
+        <li>
+            {{ event.date }}
+            <span class="badge"
+                  style="color: {{ event.category.color }}; background-color: {{ event.category.bg_color }}; font-size: 1em;">
+                <i class="{{ event.calendar.icon }}"></i>
+            </span>
+            {{ event.location }}
+        </li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}
