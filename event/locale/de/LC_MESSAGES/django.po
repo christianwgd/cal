@@ -1,0 +1,101 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-02 16:21+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: apps.py:7 models.py:96
+msgid "Event"
+msgstr "Ereignis"
+
+#: models.py:11
+msgid "Draft"
+msgstr "Entwurf"
+
+#: models.py:12
+msgid "Published"
+msgstr "Veröffentlicht"
+
+#: models.py:19 models.py:119
+msgid "Category"
+msgstr "Kategorie"
+
+#: models.py:20
+msgid "Categories"
+msgstr "Kategorien"
+
+#: models.py:30 models.py:55 models.py:83
+msgid "Name"
+msgstr ""
+
+#: models.py:31
+msgid "Background color"
+msgstr "Hintergrundfarbe"
+
+#: models.py:32
+msgid "Color"
+msgstr "Schriftfarbe"
+
+#: models.py:39 models.py:122
+msgid "Location"
+msgstr "Ort"
+
+#: models.py:40
+msgid "Locations"
+msgstr "Orte"
+
+#: models.py:57
+msgid "Character"
+msgstr "Buchstabe"
+
+#: models.py:61 models.py:90
+msgid "Default"
+msgstr "Vorgabewert"
+
+#: models.py:67 models.py:116
+msgid "Calendar"
+msgstr "Kalender"
+
+#: models.py:68
+msgid "Calendars"
+msgstr "Kalender"
+
+#: models.py:86
+msgid "Icon"
+msgstr "Symbol"
+
+#: models.py:97
+msgid "Events"
+msgstr "Ereignisse"
+
+#: models.py:113
+msgid "Date"
+msgstr "Datum"
+
+#: models.py:126
+msgid "State"
+msgstr "Status"
+
+#: models.py:128
+msgid "With Draft chosen, will only be shown for admin users on the site."
+msgstr ""
+"Wenn Entwurf ausgewählt wird, wird dieses Element nur Administratoren "
+"angezeigt werden."
+
+#: models.py:131
+msgid "Version"
+msgstr ""

@@ -37,7 +37,7 @@ class Location(models.Model):
 
     class Meta:
         verbose_name = _('Location')
-        verbose_name_plural = _('Location')
+        verbose_name_plural = _('Locations')
 
     def __str__(self):
         return self.name
@@ -64,7 +64,7 @@ class Location(models.Model):
 class Calendar(models.Model):
 
     class Meta:
-        verbose_name = _('Caledars')
+        verbose_name = _('Calendar')
         verbose_name_plural = _('Calendars')
 
     def __str__(self):
