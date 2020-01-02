@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import RedirectView
 
 # Admin Site Config
 admin.sites.AdminSite.site_header = _('Calendar')
@@ -25,5 +26,7 @@ admin.sites.AdminSite.index_title = 'Index'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path('', RedirectView.as_view(url='/event/list/')),
     path('event/', include('event.urls')),
 ]

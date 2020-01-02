@@ -66,13 +66,27 @@ $(document).ready(function(){
 
     <div id='calendar'></div>
 
-    <button class="btn btn-dark float-right" style="margin-top: 1rem;">Kalender abonnieren</button>
-    {% for loc in locations %}
-    <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" id="{{ loc.slug }}" >
-        <label class="custom-control-label" for="{{ loc.slug }}">{{ loc.name }}</label>
-    </div>
-    {% endfor %}
-
+    <table>
+        <tbody>
+            {% for loc in locations %}
+            <tr>
+                <td>{{ loc.name }}</td>
+                <td>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="{{ loc.slug }}" >
+                        <label class="custom-control-label" for="{{ loc.slug }}"></label>
+                    </div>
+                </td>
+                <td>
+                    <a href="webcal://{{ request.get_host }}/event/ical/abfuhrkalender/{{ loc.slug }}/">
+                        <button class="btn" title="Abfuhrkalender {{ loc.name }} abonnieren">
+                            <i class="far fa-external-link"></i>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}
