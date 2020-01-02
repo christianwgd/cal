@@ -20,7 +20,7 @@ function getEventSources() {
     var sources = [];
     $(".custom-control-input:checked").each(function() {
         sources.push(
-            '/event/json/abfuhrkalender/'+$(this).attr('id')+'/'
+            '/event/json/'+$('#calendar_id').val()+'/'+$(this).attr('id')+'/'
         );
         console.log(sources);
     });
@@ -64,6 +64,7 @@ $(document).ready(function(){
 
 {% block content %}
 
+    <input class="hidden" id="calendar_id" value="{{ calendar.slug }}">
     <div id='calendar'></div>
 
     <table>
@@ -76,7 +77,7 @@ $(document).ready(function(){
                         <input type="checkbox"
                                class="custom-control-input"
                                id="{{ loc.slug }}"
-                               {% if loc.default %}checked{% endif %}>
+                               {% if loc.id == calendar.def_loc.id %}checked{% endif %}>
                         <label class="custom-control-label" for="{{ loc.slug }}"></label>
                     </div>
                 </td>

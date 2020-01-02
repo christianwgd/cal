@@ -10,7 +10,7 @@ from icalendar import Alarm, vText
 from icalendar import Calendar as iCalendar
 from icalendar import Event as icalEvent
 
-from event.models import Event, Location, Calendar, CONTENT_STATUS_PUBLISHED
+from event.models import Event, Calendar, CONTENT_STATUS_PUBLISHED
 
 
 class EventListView(ListView):
@@ -29,7 +29,7 @@ class EventListView(ListView):
                 )
             except:
                 context['calendar'] = Calendar.objects.first()
-        context['locations'] = Location.objects.all()
+        context['locations'] = context['calendar'].locations.all()
         return context
 
 

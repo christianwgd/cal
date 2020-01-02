@@ -22,15 +22,10 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.slug = slugify(self.name)
-        super(Category, self).save(*args, **kwargs)
-
     name = models.CharField(max_length=50, verbose_name=_('Name'))
     bg_color = RGBColorField(verbose_name=_('Background color'),blank=True, null=True)
     color = RGBColorField(verbose_name=_('Color'), blank=True, null=True)
-    slug = models.SlugField()
+    slug = models.SlugField(blank=True, null=True)
 
 
 class Location(models.Model):
@@ -42,23 +37,12 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        if self.name:
-            self.slug = slugify(self.name)
-        if self.default is True:
-            if self.id:
-                Location.objects.exclude(pk=self.id).update(default=False)
-            else:
-                Location.objects.all().update(default=False)
-        super(Location, self).save(*args, **kwargs)
-
     name = models.CharField(max_length=50, verbose_name=_('Name'))
     char = models.CharField(
         max_length=2, verbose_name=_('Character'),
         blank=True, null=True
     )
-    slug = models.SlugField()
-    default = models.BooleanField(default=False, verbose_name=_('Default'))
+    slug = models.SlugField(blank=True, null=True)
 
 
 class Calendar(models.Model):
@@ -71,8 +55,6 @@ class Calendar(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.name:
-            self.slug = slugify(self.name)
         if self.default is True:
             if self.id:
                 Calendar.objects.exclude(pk=self.id).update(default=False)
@@ -81,12 +63,18 @@ class Calendar(models.Model):
         super(Calendar, self).save(*args, **kwargs)
 
     name = models.CharField(max_length=50, verbose_name=_('Name'))
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, verbose_name=_('Categories'))
+    locations = models.ManyToManyField(Location, verbose_name=_('Locations'))
+    def_loc = models.ForeignKey(
+        Location, verbose_name=_('Default location'),
+        on_delete=models.SET_NULL, related_name='default',
+        blank=True, null=True
+    )
     icon = models.CharField(
         max_length=20, verbose_name=_('Icon'),
         blank=True, null=True
     )
-    slug = models.SlugField()
+    slug = models.SlugField(blank=True, null=True)
     default = models.BooleanField(default=False, verbose_name=_('Default'))
 
 
