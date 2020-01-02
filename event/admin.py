@@ -14,14 +14,14 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
 
-    list_display = ['name', 'slug']
+    list_display = ['name', 'slug', 'default']
     exclude = ['slug',]
 
 
 @admin.register(Calendar)
 class CalendarAdmin(admin.ModelAdmin):
 
-    list_display = ['name', 'slug']
+    list_display = ['name', 'slug', 'default']
     exclude = ['slug', ]
     autocomplete_fields = ['categories']
 

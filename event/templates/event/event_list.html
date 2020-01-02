@@ -60,7 +60,7 @@ $(document).ready(function(){
 </script>
 {% endblock %}
 
-{% block page_title %}Abfallabfuhr-Kalender{% endblock %}
+{% block page_title %}{{ calendar.name }}{% endblock %}
 
 {% block content %}
 
@@ -73,14 +73,26 @@ $(document).ready(function(){
                 <td>{{ loc.name }}</td>
                 <td>
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="{{ loc.slug }}" >
+                        <input type="checkbox"
+                               class="custom-control-input"
+                               id="{{ loc.slug }}"
+                               {% if loc.default %}checked{% endif %}>
                         <label class="custom-control-label" for="{{ loc.slug }}"></label>
                     </div>
                 </td>
                 <td>
                     <a href="webcal://{{ request.get_host }}/event/ical/abfuhrkalender/{{ loc.slug }}/">
                         <button class="btn" title="Abfuhrkalender {{ loc.name }} abonnieren">
-                            <i class="far fa-external-link"></i>
+                            <i class="fal fa-external-link"></i>
+                            abonnieren
+                        </button>
+                    </a>
+                </td>
+                <td>
+                    <a href="http://{{ request.get_host }}/event/ical/abfuhrkalender/{{ loc.slug }}/">
+                        <button class="btn" title="Abfuhrkalender {{ loc.name }} importieren">
+                            <i class="fal fa-download"></i>
+                            importieren
                         </button>
                     </a>
                 </td>

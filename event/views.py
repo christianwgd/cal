@@ -18,6 +18,17 @@ class EventListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(EventListView, self).get_context_data(**kwargs)
+        if 'calendar' in self.kwargs:
+            context['calendar'] = Calendar.objects.get(
+                slug=self.kwargs['calendar']
+            )
+        else:
+            try:
+                context['calendar'] = Calendar.objects.get(
+                    default=True
+                )
+            except:
+                context['calendar'] = Calendar.objects.first()
         context['locations'] = Location.objects.all()
         return context
 

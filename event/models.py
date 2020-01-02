@@ -45,6 +45,11 @@ class Location(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.slug = slugify(self.name)
+        if self.default is True:
+            if self.id:
+                Location.objects.exclude(pk=self.id).update(default=False)
+            else:
+                Location.objects.all().update(default=False)
         super(Location, self).save(*args, **kwargs)
 
     name = models.CharField(max_length=50, verbose_name=_('Name'))
@@ -53,6 +58,7 @@ class Location(models.Model):
         blank=True, null=True
     )
     slug = models.SlugField()
+    default = models.BooleanField(default=False, verbose_name=_('Default'))
 
 
 class Calendar(models.Model):
@@ -67,6 +73,11 @@ class Calendar(models.Model):
     def save(self, *args, **kwargs):
         if self.name:
             self.slug = slugify(self.name)
+        if self.default is True:
+            if self.id:
+                Calendar.objects.exclude(pk=self.id).update(default=False)
+            else:
+                Calendar.objects.all().update(default=False)
         super(Calendar, self).save(*args, **kwargs)
 
     name = models.CharField(max_length=50, verbose_name=_('Name'))
@@ -76,6 +87,7 @@ class Calendar(models.Model):
         blank=True, null=True
     )
     slug = models.SlugField()
+    default = models.BooleanField(default=False, verbose_name=_('Default'))
 
 
 class Event(models.Model):
