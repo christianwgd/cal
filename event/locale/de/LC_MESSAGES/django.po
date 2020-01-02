@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-02 16:21+0100\n"
+"POT-Creation-Date: 2020-01-02 18:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: apps.py:7 models.py:96
+#: apps.py:7 models.py:84
 msgid "Event"
 msgstr "Ereignis"
 
@@ -30,72 +30,76 @@ msgstr "Entwurf"
 msgid "Published"
 msgstr "Veröffentlicht"
 
-#: models.py:19 models.py:119
+#: models.py:19 models.py:107
 msgid "Category"
 msgstr "Kategorie"
 
-#: models.py:20
+#: models.py:20 models.py:66
 msgid "Categories"
 msgstr "Kategorien"
 
-#: models.py:30 models.py:55 models.py:83
+#: models.py:25 models.py:40 models.py:65
 msgid "Name"
 msgstr ""
 
-#: models.py:31
+#: models.py:26
 msgid "Background color"
 msgstr "Hintergrundfarbe"
 
-#: models.py:32
+#: models.py:27
 msgid "Color"
 msgstr "Schriftfarbe"
 
-#: models.py:39 models.py:122
+#: models.py:34 models.py:110
 msgid "Location"
 msgstr "Ort"
 
-#: models.py:40
+#: models.py:35 models.py:67
 msgid "Locations"
 msgstr "Orte"
 
-#: models.py:57
+#: models.py:42
 msgid "Character"
 msgstr "Buchstabe"
 
-#: models.py:61 models.py:90
-msgid "Default"
-msgstr "Vorgabewert"
-
-#: models.py:67 models.py:116
+#: models.py:51 models.py:104
 msgid "Calendar"
 msgstr "Kalender"
 
-#: models.py:68
+#: models.py:52
 msgid "Calendars"
 msgstr "Kalender"
 
-#: models.py:86
+#: models.py:69
+msgid "Default location"
+msgstr "Vorgabeort"
+
+#: models.py:74
 msgid "Icon"
 msgstr "Symbol"
 
-#: models.py:97
+#: models.py:78
+msgid "Default"
+msgstr "Vorgabewert"
+
+#: models.py:85
 msgid "Events"
 msgstr "Ereignisse"
 
-#: models.py:113
+#: models.py:101
 msgid "Date"
 msgstr "Datum"
 
-#: models.py:126
+#: models.py:114
 msgid "State"
 msgstr "Status"
 
-#: models.py:128
+#: models.py:116
 msgid "With Draft chosen, will only be shown for admin users on the site."
 msgstr ""
 "Wenn Entwurf ausgewählt wird, wird dieses Element nur Administratoren "
 "angezeigt werden."
 
-#: models.py:131
+#: models.py:119
 msgid "Version"
 msgstr ""
