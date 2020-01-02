@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'colorful',
     'cal',
-    'event',
+    'event.apps.EventConfig',
     'bootstrap4',
 ]
 
