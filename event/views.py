@@ -2,6 +2,8 @@
 import json
 import dateutil.parser
 import datetime
+
+from django.shortcuts import render
 from django.utils import formats
 
 from django.http import HttpResponse
@@ -13,11 +15,12 @@ from icalendar import Event as icalEvent
 from event.models import Event, Calendar, CONTENT_STATUS_PUBLISHED
 
 
-class EventListView(ListView):
+class EventCalendarView(ListView):
     model = Event
+    template_name = 'event/event_calendar.html'
 
     def get_context_data(self, **kwargs):
-        context = super(EventListView, self).get_context_data(**kwargs)
+        context = super(EventCalendarView, self).get_context_data(**kwargs)
         if 'calendar' in self.kwargs:
             context['calendar'] = Calendar.objects.get(
                 slug=self.kwargs['calendar']
@@ -31,6 +34,11 @@ class EventListView(ListView):
                 context['calendar'] = Calendar.objects.first()
         context['locations'] = context['calendar'].locations.all()
         return context
+
+
+def event_edit(request):
+    calendars = Calendar.objects.all()
+    return render(request, 'event/event_edit.html', {'calendars': calendars})
 
 
 def events_as_json(request, calendar=None, location=None):

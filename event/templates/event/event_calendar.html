@@ -20,7 +20,7 @@ function getEventSources() {
     var sources = [];
     $(".custom-control-input:checked").each(function() {
         sources.push(
-            '/event/json/'+$('#calendar_id').val()+'/'+$(this).attr('id')+'/'
+            '/event/events/'+$('#calendar_id').val()+'/'+$(this).attr('id')+'/'
         );
         console.log(sources);
     });
@@ -66,6 +66,12 @@ $(document).ready(function(){
 
     <input class="hidden" id="calendar_id" value="{{ calendar.slug }}">
     <div id='calendar'></div>
+
+    {% if user.is_staff %}
+    <a href="{% url 'event:edit' %}" class="btn btn-success float-right" style="margin-top: 1em;">
+        <i class="far fa-edit"></i>
+    </a>
+    {% endif %}
 
     <table>
         <tbody>
