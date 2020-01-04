@@ -68,7 +68,8 @@ $(document).ready(function(){
     <div id='calendar'></div>
 
     {% if user.is_staff %}
-    <a href="{% url 'event:edit' %}" class="btn btn-success float-right" style="margin-top: 1em;">
+    <a href="{% url 'event:edit' %}" class="btn btn-success float-right"
+       style="margin-top: 1em;" title="{% trans 'edit' %}">
         <i class="far fa-edit"></i>
     </a>
     {% endif %}
@@ -89,17 +90,17 @@ $(document).ready(function(){
                 </td>
                 <td>
                     <a href="webcal://{{ request.get_host }}/event/ical/abfuhrkalender/{{ loc.slug }}/">
-                        <button class="btn" title="Abfuhrkalender {{ loc.name }} abonnieren">
+                        <button class="btn" title="Abfuhrkalender {{ loc.name }} {% trans 'subscribe' %}">
                             <i class="fal fa-external-link"></i>
-                            abonnieren
+                            {% trans 'subscribe' %}
                         </button>
                     </a>
                 </td>
                 <td>
                     <a href="http://{{ request.get_host }}/event/ical/abfuhrkalender/{{ loc.slug }}/">
-                        <button class="btn" title="Abfuhrkalender {{ loc.name }} importieren">
+                        <button class="btn" title="Abfuhrkalender {{ loc.name }} {% trans 'import' %}">
                             <i class="fal fa-download"></i>
-                            importieren
+                            {% trans 'import' %}
                         </button>
                     </a>
                 </td>

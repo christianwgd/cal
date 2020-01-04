@@ -4,10 +4,159 @@
 {% block bootstrap4_extra_head %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% static "css/event.css" %}" />
-<script>
-$(document).ready(function(){
+<link href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
 
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="{% static 'datetimepicker/moment.min.js' %}"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+<script>
+
+function refreshLocations() {
+    var calendar = $('#id_calendar').val();
+    $.get({
+        url: '/event/loc_options/' + calendar + '/',
+        dataType: 'json',
+        success: function (data) {
+            $('#id_location').empty();
+            $('#id_location').append(new Option(
+                '-----', ''
+            ));
+            for (loc in data) {
+                $('#id_location').append(new Option(
+                    data[loc].name, data[loc].value
+                ));
+            }
+        }
+    });
+}
+
+function refreshCategories() {
+    var calendar = $('#id_calendar').val();
+    $.get({
+        url: '/event/cat_options/' + calendar + '/',
+        dataType: 'json',
+        success: function (data) {
+            $('#id_category').empty();
+            $('#id_category').append(new Option(
+                '-----', ''
+            ));
+            for (cat in data) {
+                $('#id_category').append(new Option(
+                    data[cat].name, data[cat].value
+                ));
+            }
+        }
+    });
+}
+
+function refreshEventList() {
+    var table = $('#id_events');
+    table.bootstrapTable('removeAll');
+    var calendar = $('#id_calendar').val();
+    var location = $('#id_location').val();
+    var category = $('#id_category').val();
+    $.ajax({
+    	url: '/event/list/'+calendar+'/'+location+'/'+category+'/',
+        type: 'get',
+        dataType: 'json',
+        success: function (events) {
+        	for (event in events) {
+        	    row = {
+        	        id: events[event].id,
+                    date: events[event].date,
+                    calendar: events[event].calendar,
+                    location: events[event].location,
+                    category: events[event].category,
+                    delete: '<button class="btn btn-danger btn-sm" onclick="removeEvent('+events[event].id+');return false;"><i class="far fa-trash"></i></button>'
+                };
+                table.bootstrapTable('prepend', row);
+            }
+        },
+    });
+}
+
+function removeEvent(event_id) {
+    $.get({
+        url: '/event/delete/' + event_id + '/',
+        success: function (data) {
+            refreshEventList();
+        }
+    });
+}
+
+
+function addEvent() {
+    var date = $('#id_picker').datetimepicker('viewDate');
+    var date_str = date.format('DD.MM.YYYY');
+
+    var calendar = $('#id_calendar').val();
+    var location = $('#id_location').val();
+    var category = $('#id_category').val();
+    var table = $('#id_events');
+
+    $.get({
+        url: '/event/create/' + calendar + '/' + location + '/' + category + '/' + date_str + '/',
+        success: function (id) {
+            refreshEventList();
+        }
+    });
+}
+
+
+function toggleAddButton() {
+    var calendar = $('#id_calendar').val();
+    var location = $('#id_location').val();
+    var category = $('#id_category').val();
+
+    if (calendar === '' || location === '' || category === '' ) {
+        $('#id_add').prop('disabled', true);
+    } else {
+        $('#id_add').prop('disabled', false);
+    }
+}
+
+
+function toggleRefreshButton() {
+    var table = $('#id_events');
+    var calendar = $('#id_calendar').val();
+    var location = $('#id_location').val();
+    var category = $('#id_category').val();
+
+    if (calendar === '' || location === '' || category === '') {
+        $('#id_refresh').prop('disabled', true);
+        table.bootstrapTable('removeAll');
+    } else {
+        $('#id_refresh').prop('disabled', false);
+        refreshEventList();
+    }
+}
+
+
+$(document).ready(function(){
+    var picker = $('#id_picker').datetimepicker({
+        locale: 'de',
+        format: 'DD.MM.YYYY',
+        defaultDate: new Date()
+    });
+
+    $('#id_calendar').change(function() {
+        refreshLocations();
+        refreshCategories();
+        toggleAddButton();
+        toggleRefreshButton();
+    });
+
+    $('#id_location').change(function() {
+        toggleAddButton();
+        toggleRefreshButton();
+    });
+    $('#id_category').change(function() {
+        toggleAddButton();
+        toggleRefreshButton();
+    });
 });
+
 </script>
 {% endblock %}
 
@@ -18,15 +167,73 @@ $(document).ready(function(){
 <div class="form-group">
     <label for="id_calendar">{% trans 'Calendar' %}</label>
     <select class="form-control" id="id_calendar">
+        <option value="" selected>-----</option>
         {% for calendar in calendars %}
         <option value="{{ calendar.slug }}">{{ calendar.name }}</option>
         {% endfor %}
     </select>
 </div>
 
+<div class="form-group">
+    <label for="id_location">{% trans 'Location' %}</label>
+    <select class="form-control" id="id_location">
+        <option value="" selected>-----</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="id_category">{% trans 'Category' %}</label>
+    <select class="form-control" id="id_category">
+        <option value="" selected>-----</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <div class="input-group date" id="id_picker" data-target-input="nearest">
+        <input type="text" class="form-control datetimepicker-input" data-target="#id_picker"/>
+        <div class="input-group-append" data-target="#id_picker" data-toggle="datetimepicker">
+            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+        </div>
+    </div>
+</div>
+
+<button id="id_add" class="btn btn-success btn-sm" onclick="addEvent();" disabled>
+    <i class="far fa-plus"></i>
+</button>
+
+
+<hr/>
+
+<div class="form-group">
+    <table class="table table-striped table-sm" id="id_events"
+           data-toggle="table" data-unique-id="id">
+        <thead>
+            <tr>
+                <th data-field="id">{% trans 'ID' %}</th>
+                <th data-field="date">{% trans 'Date' %}</th>
+                <th data-field="calendar">{% trans 'Calendar' %}</th>
+                <th data-field="location">{% trans 'Location' %}</th>
+                <th data-field="category">{% trans 'Category' %}</th>
+                <th data-field="delete" data-align="center"></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<button id="id_refresh" class="btn btn-secondary btn-sm" onclick="refreshEventList();" disabled>
+    <i class="far fa-sync"></i>
+</button>
+
+
+<hr/>
+
 
 <div class="buttons">
-    <a href=""
+    <a href="{% url 'event:calendar' %}" class="btn btn-primary">
+        <i class="far fa-check"></i>
+    </a>
 </div>
 
 {% endblock %}

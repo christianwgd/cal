@@ -5,14 +5,17 @@ import datetime
 
 from django.shortcuts import render
 from django.utils import formats
-
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.generic import ListView
+
 from icalendar import Alarm, vText
 from icalendar import Calendar as iCalendar
 from icalendar import Event as icalEvent
 
-from event.models import Event, Calendar, CONTENT_STATUS_PUBLISHED
+from event.models import (
+    Event, Calendar, Location, Category,
+    CONTENT_STATUS_PUBLISHED
+)
 
 
 class EventCalendarView(ListView):
@@ -129,3 +132,71 @@ def sync_ical(request, cal_slug, location=None):
     response = HttpResponse(ical.to_ical(), content_type="text/calendar, text/x-vcalendar, application/hbs-vcs")
     response['Content-Disposition'] = 'attachment; filename="{}.ics"'.format(calendar.slug)
     return response
+
+
+def event_list(request, calendar, location, category):
+
+    events = Event.objects.filter(
+        calendar__slug=calendar,
+        location__slug=location,
+        category__slug=category
+    ).order_by('-date')
+
+    jsnEvents = []
+    for event in events:
+        jsnEvent = {
+            'id': event.id,
+            'date': formats.date_format(event.date, "SHORT_DATE_FORMAT"),
+            'calendar': event.calendar.name,
+            'location': event.location.name,
+            'category': event.category.name
+        }
+        jsnEvents.append(jsnEvent)
+
+    return JsonResponse(jsnEvents, safe=False)
+
+
+def get_location_options(request, cal_slug):
+
+    calendar = Calendar.objects.get(slug=cal_slug)
+    loc_options = []
+    for location in calendar.locations.all():
+        loc_options.append({
+            'value': location.slug,
+            'name': location.name
+        })
+
+    return JsonResponse(loc_options, safe=False)
+
+
+def get_category_options(request, cal_slug):
+
+    calendar = Calendar.objects.get(slug=cal_slug)
+    cat_options = []
+    for category in calendar.categories.all():
+        cat_options.append({
+            'value': category.slug,
+            'name': category.name
+        })
+
+    return JsonResponse(cat_options, safe=False)
+
+
+def create_event(request, cal_slug, loc_slug, cat_slug, dat_str):
+    date = datetime.datetime.strptime(dat_str, '%d.%m.%Y')
+    calendar = Calendar.objects.get(slug=cal_slug)
+    location = Location.objects.get(slug=loc_slug)
+    category = Category.objects.get(slug=cat_slug)
+    Event.objects.create(
+        date=date,
+        calendar=calendar,
+        location=location,
+        category=category,
+        state=CONTENT_STATUS_PUBLISHED
+    )
+    return JsonResponse('', safe=False)
+
+
+def delete_event(request, event_id):
+    Event.objects.get(pk=event_id).delete()
+    return JsonResponse('Deleted', safe=False)

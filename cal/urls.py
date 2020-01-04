@@ -27,6 +27,6 @@ admin.sites.AdminSite.index_title = 'Index'
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', RedirectView.as_view(url='/event/list/')),
+    path('', RedirectView.as_view(url='/event/calendar/')),
     path('event/', include('event.urls')),
 ]

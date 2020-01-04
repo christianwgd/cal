@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-02 18:33+0100\n"
+"POT-Creation-Date: 2020-01-03 12:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,7 +62,7 @@ msgstr "Orte"
 msgid "Character"
 msgstr "Buchstabe"
 
-#: models.py:51 models.py:104
+#: models.py:51 models.py:104 templates/event/event_edit.html:19
 msgid "Calendar"
 msgstr "Kalender"
 
@@ -103,3 +103,21 @@ msgstr ""
 #: models.py:119
 msgid "Version"
 msgstr ""
+
+#: templates/event/event_calendar.html:72
+msgid "edit"
+msgstr "bearbeiten"
+
+#: templates/event/event_calendar.html:93
+#: templates/event/event_calendar.html:95
+msgid "subscribe"
+msgstr "abonnieren"
+
+#: templates/event/event_calendar.html:101
+#: templates/event/event_calendar.html:103
+msgid "import"
+msgstr "importieren"
+
+#: templates/event/event_edit.html:14
+msgid "Calendar edit"
+msgstr "Kalender bearbeiten"
