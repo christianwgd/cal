@@ -3,10 +3,12 @@ import json
 import dateutil.parser
 import datetime
 
+from django.contrib import messages
 from django.shortcuts import render
 from django.utils import formats
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import ListView
+from django.utils.translation import ugettext_lazy as _
 
 from icalendar import Alarm, vText
 from icalendar import Calendar as iCalendar
@@ -25,9 +27,12 @@ class EventCalendarView(ListView):
     def get_context_data(self, **kwargs):
         context = super(EventCalendarView, self).get_context_data(**kwargs)
         if 'calendar' in self.kwargs:
-            context['calendar'] = Calendar.objects.get(
-                slug=self.kwargs['calendar']
-            )
+            try:
+                context['calendar'] = Calendar.objects.get(
+                    slug=self.kwargs['calendar']
+                )
+            except Calendar.DoesNotExist:
+                messages.error(self.request, _('No calendars found.'))
         else:
             try:
                 context['calendar'] = Calendar.objects.get(
