@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static bootstrap4 l10n i18n  %}
+{% load static bootstrap4 l10n i18n event_tags %}
 
 {% block bootstrap4_extra_head %}
 {{ block.super }}
@@ -84,7 +84,7 @@ $(document).ready(function(){
                         <input type="checkbox"
                                class="custom-control-input"
                                id="{{ loc.slug }}"
-                               {% if loc.id == calendar.def_loc.id %}checked{% endif %}>
+                               {% is_default loc.slug def_loc calendar.def_loc.slug %}>
                         <label class="custom-control-label" for="{{ loc.slug }}"></label>
                     </div>
                 </td>

@@ -7,6 +7,7 @@ app_name = 'event'
 urlpatterns = [
     path('calendar/', views.EventCalendarView.as_view(), name='calendar'),
     path('calendar/<slug:calendar>/', views.EventCalendarView.as_view(), name='calendar'),
+    path('calendar/<slug:calendar>/<slug:location>/', views.EventCalendarView.as_view(), name='calendar'),
 
     path('edit/', views.event_edit, name='edit'),
 

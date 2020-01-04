@@ -36,6 +36,8 @@ class EventCalendarView(ListView):
             except:
                 context['calendar'] = Calendar.objects.first()
         context['locations'] = context['calendar'].locations.all()
+        if 'location' in self.kwargs:
+            context['def_loc'] = self.kwargs['location']
         return context
 
 
