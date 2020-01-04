@@ -33,6 +33,7 @@ class EventCalendarView(ListView):
                 )
             except Calendar.DoesNotExist:
                 messages.error(self.request, _('No calendars found.'))
+                return context
         else:
             try:
                 context['calendar'] = Calendar.objects.get(
