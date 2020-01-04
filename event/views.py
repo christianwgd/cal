@@ -27,13 +27,10 @@ class EventCalendarView(ListView):
     def get_context_data(self, **kwargs):
         context = super(EventCalendarView, self).get_context_data(**kwargs)
         if 'calendar' in self.kwargs:
-            try:
+
                 context['calendar'] = Calendar.objects.get(
                     slug=self.kwargs['calendar']
                 )
-            except Calendar.DoesNotExist:
-                messages.error(self.request, _('No calendars found.'))
-                return context
         else:
             try:
                 context['calendar'] = Calendar.objects.get(
@@ -41,9 +38,11 @@ class EventCalendarView(ListView):
                 )
             except:
                 context['calendar'] = Calendar.objects.first()
-        context['locations'] = context['calendar'].locations.all()
-        if 'location' in self.kwargs:
-            context['def_loc'] = self.kwargs['location']
+
+        if context['calendar'] is not None:
+            context['locations'] = context['calendar'].locations.all()
+            if 'location' in self.kwargs:
+                context['def_loc'] = self.kwargs['location']
         return context
 
 
