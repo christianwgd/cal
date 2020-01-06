@@ -1,3 +1,19 @@
 #id_content {
     padding-top: 1rem;
 }
+
+.footer {
+	margin-top: 2rem;
+}
+
+a {
+    color: #999999;
+}
+
+a:hover {
+    color: #333333;
+}
+
+.footer a {
+    margin-left: 1rem;
+}

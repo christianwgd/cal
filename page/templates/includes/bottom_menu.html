@@ -1,0 +1,6 @@
+{% for page in pages %}
+<a href="{{ page.get_absolute_url }}" class="menu">
+    {% if page.icon %}<i class="far fa-{{ page.icon }}"></i>{% endif %}
+    {{ page.name }}
+</a>
+{% endfor %}

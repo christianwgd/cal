@@ -31,7 +31,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'colorful',
+    'ckeditor_uploader',
+    'ckeditor',
+    'orderable',
     'cal',
+    'page',
     'event.apps.EventConfig',
     'bootstrap4',
 ]
@@ -108,6 +112,30 @@ BOOTSTRAP4 = {
     'javascript_in_head': True,
     'theme_url': '/static/css/bootstrap.min.css',
 }
+
+#####################
+# CKEDITOR SETTINGS #
+#####################
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': [
+            ["Format", "Bold", "Italic", "Underline"],
+            [ 'TextColor', 'BGColor' ],
+            ['NumberedList', 'BulletedList', "Indent", "Outdent", 'JustifyLeft',
+                'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ["Image", "Table", "Link", "Unlink", "Iframe"],
+            ['Undo', 'Redo'],
+            ["Source"],
+            ["Maximize"]
+        ],
+        'extraAllowedContent': 'iframe[*]',
+    }
+}
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_RESTRICT_BY_USER = True
+CKEDITOR_BROWSE_SHOW_DIRS = True
+CKEDITOR_ALLOW_NONIMAGE_FILES = False
 
 ##################
 # LOCAL SETTINGS #

@@ -1,5 +1,5 @@
 {% extends 'bootstrap4/bootstrap4.html' %}
-{% load bootstrap4 static i18n %}
+{% load bootstrap4 static i18n page_tags %}
 
 {% block bootstrap4_extra_head %}
 {{ block.super }}
@@ -68,5 +68,27 @@
 
 </div>
 <!-- END Content -->
+
+<!-- Footer -->
+<div class="container footer">
+    <div class="row">
+        <div class="col-12">
+            <hr/>
+        </div>
+        <div class="col-sm-6">
+            <p class="text-left">
+                <a href="{% url 'home' %}">
+                    <i class="far fa-home"></i>
+                </a>
+            </p>
+        </div>
+        <div class="col-sm-6">
+            <p class="text-right">
+                {% bottom_menu %}
+            </p>
+        </div>
+    </div>
+</div>
+<!-- END Footer -->
 
 {% endblock %}

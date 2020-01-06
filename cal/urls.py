@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import RedirectView
+from django.conf import settings
+from django.conf.urls.static import static
 
 # Admin Site Config
 admin.sites.AdminSite.site_header = _('Calendar')
@@ -26,7 +28,14 @@ admin.sites.AdminSite.index_title = 'Index'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+
     path('favicon\.ico', RedirectView.as_view(url='/static/icons/favicon.ico')),
-    path('', RedirectView.as_view(url='/event/calendar/')),
+    path('', RedirectView.as_view(url='/event/calendar/'), name='home'),
+
+    path('page/', include('page.urls')),
     path('event/', include('event.urls')),
 ]
+if settings.DEBUG == True:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
