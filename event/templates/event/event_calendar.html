@@ -88,20 +88,16 @@ $(document).ready(function(){
                         <label class="custom-control-label" for="{{ loc.slug }}"></label>
                     </div>
                 </td>
-                <td>
+                <td style="min-width: 8rem; text-align: center;">
                     <a href="webcal://{{ request.get_host }}/event/ical/abfuhrkalender/{{ loc.slug }}/">
-                        <button class="btn" title="Abfuhrkalender {{ loc.name }} {% trans 'subscribe' %}">
-                            <i class="fal fa-external-link"></i>
-                            {% trans 'subscribe' %}
-                        </button>
+                        <i class="fal fa-external-link"></i>
+                        {% trans 'subscribe' %}
                     </a>
                 </td>
-                <td>
+                <td style="min-width: 8rem; text-align: center;">
                     <a href="http://{{ request.get_host }}/event/ical/abfuhrkalender/{{ loc.slug }}/">
-                        <button class="btn" title="Abfuhrkalender {{ loc.name }} {% trans 'import' %}">
-                            <i class="fal fa-download"></i>
-                            {% trans 'import' %}
-                        </button>
+                        <i class="fal fa-download"></i>
+                        {% trans 'import' %}
                     </a>
                 </td>
             </tr>
