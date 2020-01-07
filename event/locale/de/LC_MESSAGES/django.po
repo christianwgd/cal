@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-07 19:38+0100\n"
+"POT-Creation-Date: 2020-01-07 20:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,25 +107,30 @@ msgstr ""
 msgid "Version"
 msgstr ""
 
-#: templates/event/event_calendar.html:71
+#: templates/event/event_calendar.html:87
 msgid "edit"
 msgstr "bearbeiten"
 
-#: templates/event/event_calendar.html:95
+#: templates/event/event_calendar.html:112
 msgid "subscribe"
 msgstr "abonnieren"
 
-#: templates/event/event_calendar.html:101
+#: templates/event/event_calendar.html:119
 msgid "import"
 msgstr "importieren"
 
-#: templates/event/event_calendar.html:112
+#: templates/event/event_calendar.html:130
 msgid "Alarm"
 msgstr ""
 
-#: templates/event/event_calendar.html:115
-msgid "Time in hours at which the alarm should be set before the event"
-msgstr "Zeit in Stunden, zu der der Alarm vor dem Ereingnis eingestellt werden soll"
+#: templates/event/event_calendar.html:138
+msgid ""
+"Time in hours at which the alarm should be set before the event. The event "
+"starts at 0:00, so 4 hours means alarm at 8 p.m."
+msgstr ""
+"Zeit in Stunden, zu der der Alarm vor dem Ereingnis eingestellt werden soll."
+"Ereignisse starten jeweils um 0 Uhr, so dass 4 Stunden einen Alarm um 20 Uhr "
+"setzen."
 
 #: templates/event/event_edit.html:163
 msgid "Calendar edit"

@@ -62,7 +62,6 @@ $(document).ready(function(){
             var url = $this.attr("href");
             var url_array = url.split("/");
             var last = url_array[url_array.length-2];
-            console.log(last);
             if (isNaN(last)) {
                 var _href = url + hours;
             } else {
@@ -136,7 +135,10 @@ $(document).ready(function(){
                     </div>
                 </div>
                 <small id="passwordHelpBlock" class="form-text text-muted">
-                    {% blocktrans %}Time in hours at which the alarm should be set before the event{% endblocktrans %}
+                    {% blocktrans trimmed %}
+                        Time in hours at which the alarm should be set before the event.
+                        The event starts at 0:00, so 4 hours means alarm at 8 p.m.
+                    {% endblocktrans %}
                 </small>
 
             </div>
