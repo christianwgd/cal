@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-03 12:56+0100\n"
+"POT-Creation-Date: 2020-01-07 19:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,106 +18,119 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: apps.py:7 models.py:84
+#: apps.py:7 models.py:83
 msgid "Event"
 msgstr "Ereignis"
 
-#: models.py:11
+#: models.py:10
 msgid "Draft"
 msgstr "Entwurf"
 
-#: models.py:12
+#: models.py:11
 msgid "Published"
 msgstr "Veröffentlicht"
 
-#: models.py:19 models.py:107
+#: models.py:18 models.py:106 templates/event/event_edit.html:185
+#: templates/event/event_edit.html:216
 msgid "Category"
 msgstr "Kategorie"
 
-#: models.py:20 models.py:66
+#: models.py:19 models.py:65
 msgid "Categories"
 msgstr "Kategorien"
 
-#: models.py:25 models.py:40 models.py:65
+#: models.py:24 models.py:39 models.py:64
 msgid "Name"
 msgstr ""
 
-#: models.py:26
+#: models.py:25
 msgid "Background color"
 msgstr "Hintergrundfarbe"
 
-#: models.py:27
+#: models.py:26
 msgid "Color"
 msgstr "Schriftfarbe"
 
-#: models.py:34 models.py:110
+#: models.py:33 models.py:109 templates/event/event_edit.html:178
+#: templates/event/event_edit.html:215
 msgid "Location"
 msgstr "Ort"
 
-#: models.py:35 models.py:67
+#: models.py:34 models.py:66
 msgid "Locations"
 msgstr "Orte"
 
-#: models.py:42
+#: models.py:41
 msgid "Character"
 msgstr "Buchstabe"
 
-#: models.py:51 models.py:104 templates/event/event_edit.html:19
+#: models.py:50 models.py:103 templates/event/event_edit.html:168
+#: templates/event/event_edit.html:214
 msgid "Calendar"
 msgstr "Kalender"
 
-#: models.py:52
+#: models.py:51
 msgid "Calendars"
 msgstr "Kalender"
 
-#: models.py:69
+#: models.py:68
 msgid "Default location"
 msgstr "Vorgabeort"
 
-#: models.py:74
+#: models.py:73
 msgid "Icon"
 msgstr "Symbol"
 
-#: models.py:78
+#: models.py:77
 msgid "Default"
 msgstr "Vorgabewert"
 
-#: models.py:85
+#: models.py:84
 msgid "Events"
 msgstr "Ereignisse"
 
-#: models.py:101
+#: models.py:100 templates/event/event_edit.html:213
 msgid "Date"
 msgstr "Datum"
 
-#: models.py:114
+#: models.py:113
 msgid "State"
 msgstr "Status"
 
-#: models.py:116
+#: models.py:115
 msgid "With Draft chosen, will only be shown for admin users on the site."
 msgstr ""
 "Wenn Entwurf ausgewählt wird, wird dieses Element nur Administratoren "
 "angezeigt werden."
 
-#: models.py:119
+#: models.py:118
 msgid "Version"
 msgstr ""
 
-#: templates/event/event_calendar.html:72
+#: templates/event/event_calendar.html:71
 msgid "edit"
 msgstr "bearbeiten"
 
-#: templates/event/event_calendar.html:93
 #: templates/event/event_calendar.html:95
 msgid "subscribe"
 msgstr "abonnieren"
 
 #: templates/event/event_calendar.html:101
-#: templates/event/event_calendar.html:103
 msgid "import"
 msgstr "importieren"
 
-#: templates/event/event_edit.html:14
+#: templates/event/event_calendar.html:112
+msgid "Alarm"
+msgstr ""
+
+#: templates/event/event_calendar.html:115
+msgid "Time in hours at which the alarm should be set before the event"
+msgstr "Zeit in Stunden, zu der der Alarm vor dem Ereingnis eingestellt werden soll"
+
+#: templates/event/event_edit.html:163
 msgid "Calendar edit"
 msgstr "Kalender bearbeiten"
+
+#: templates/event/event_edit.html:212
+msgid "ID"
+msgstr ""

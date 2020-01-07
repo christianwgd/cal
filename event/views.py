@@ -85,7 +85,7 @@ def events_as_json(request, calendar=None, location=None):
     return HttpResponse(json.dumps(cal))
 
 
-def sync_ical(request, cal_slug, location=None):
+def sync_ical(request, cal_slug, location=None, alarm_time=None):
 
     calendar = Calendar.objects.get(slug=cal_slug)
 
@@ -103,6 +103,9 @@ def sync_ical(request, cal_slug, location=None):
             date__gte=now,
             state=CONTENT_STATUS_PUBLISHED
         ).order_by('date')
+
+    if alarm_time is None:
+        alarm_time = 16
 
     ical = iCalendar()
     ical.add('version', '2.0')
@@ -125,7 +128,7 @@ def sync_ical(request, cal_slug, location=None):
         cal_event.add('sequence', '%d' % event.version)
 
         alarm = Alarm()
-        alarm.add('trigger', vText('-PT16H'))
+        alarm.add('trigger', vText('-PT{}H'.format(alarm_time)))
         alarm.add('action', 'DISPLAY')
         alarm.add('description', '{calname}: {catname}'.format(
             calname = event.calendar.name,
