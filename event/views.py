@@ -57,16 +57,16 @@ class CalendarEdit(UpdateView):
         ctx['calendars'] = Calendar.objects.all()
         return ctx
 
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['location'] = self.request.GET.get('location', None)
+        initial['category'] = self.request.GET.get('category', None)
+        return initial
+
     def get_form_kwargs(self, *args, **kwargs):
         form_kwargs = super(CalendarEdit, self).get_form_kwargs()
         form_kwargs['calendar'] = self.object
         return form_kwargs
-
-
-# def event_edit(request):
-#     calendars = Calendar.objects.all()
-#     return render(request, 'event/event_edit.html', {'calendars': calendars})
-
 
 
 def events_as_json(request, calendar=None, location=None):
@@ -235,4 +235,11 @@ class EventUpdateView(BSModalUpdateView):
     form_class = EventUpdateForm
 
     def get_success_url(self):
-        return reverse('event:edit')
+        form = self.get_form()
+        loc = Location.objects.get(pk=form.data['location'])
+        cat = Category.objects.get(pk=form.data['category'])
+        return '{url}?location={loc}&category={cat}'.format(
+            url=reverse('event:edit', kwargs={ 'pk': self.object.calendar.id }),
+            loc=loc.slug,
+            cat=cat.slug,
+        )

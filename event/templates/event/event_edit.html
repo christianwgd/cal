@@ -15,44 +15,6 @@
 <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
 <script>
 
-function refreshLocations() {
-    var calendar = $('#id_calendar').val();
-    $.get({
-        url: '/event/loc_options/' + calendar + '/',
-        dataType: 'json',
-        success: function (data) {
-            $('#id_location').empty();
-            $('#id_location').append(new Option(
-                '-----', ''
-            ));
-            for (loc in data) {
-                $('#id_location').append(new Option(
-                    data[loc].name, data[loc].value
-                ));
-            }
-        }
-    });
-}
-
-function refreshCategories() {
-    var calendar = $('#id_calendar').val();
-    $.get({
-        url: '/event/cat_options/' + calendar + '/',
-        dataType: 'json',
-        success: function (data) {
-            $('#id_category').empty();
-            $('#id_category').append(new Option(
-                '-----', ''
-            ));
-            for (cat in data) {
-                $('#id_category').append(new Option(
-                    data[cat].name, data[cat].value
-                ));
-            }
-        }
-    });
-}
-
 function refreshEventList() {
     var table = $('#id_events');
     table.bootstrapTable('removeAll');
@@ -131,9 +93,6 @@ function toggleRefreshButton() {
     var location = $('#id_location').val();
     var category = $('#id_category').val();
 
-    console.log(calendar);
-    console.log(location);
-    console.log(category);
     if (location === '' || category === '') {
         $('#id_refresh').prop('disabled', true);
         table.bootstrapTable('removeAll');
@@ -145,18 +104,11 @@ function toggleRefreshButton() {
 
 
 $(document).ready(function(){
-    var picker = $('#id_picker').datetimepicker({
-        locale: 'de',
-        format: 'DD.MM.YYYY',
-        defaultDate: new Date()
-    });
-
-    $('#id_calendar').change(function() {
-        refreshLocations();
-        refreshCategories();
-        toggleAddButton();
-        toggleRefreshButton();
-    });
+    var location = $('#id_location').val();
+    var category = $('#id_category').val();
+    if (location !== '' && category !== '') {
+        refreshEventList();
+    }
 
     $('#id_location').change(function() {
         toggleAddButton();
