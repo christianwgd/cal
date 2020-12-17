@@ -8,13 +8,13 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils import formats
 from django.http import HttpResponse, JsonResponse
-from django.views.generic import ListView
+from django.views.generic import ListView, UpdateView
 
 from icalendar import Alarm, vText
 from icalendar import Calendar as iCalendar
 from icalendar import Event as icalEvent
 
-from event.forms import EventUpdateForm
+from event.forms import EventUpdateForm, EventForm
 from event.models import (
     Event, Calendar, Location, Category,
     CONTENT_STATUS_PUBLISHED
@@ -47,9 +47,26 @@ class EventCalendarView(ListView):
         return context
 
 
-def event_edit(request):
-    calendars = Calendar.objects.all()
-    return render(request, 'event/event_edit.html', {'calendars': calendars})
+class CalendarEdit(UpdateView):
+    model = Calendar
+    form_class = EventForm
+    template_name = 'event/event_edit.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['calendars'] = Calendar.objects.all()
+        return ctx
+
+    def get_form_kwargs(self, *args, **kwargs):
+        form_kwargs = super(CalendarEdit, self).get_form_kwargs()
+        form_kwargs['calendar'] = self.object
+        return form_kwargs
+
+
+# def event_edit(request):
+#     calendars = Calendar.objects.all()
+#     return render(request, 'event/event_edit.html', {'calendars': calendars})
+
 
 
 def events_as_json(request, calendar=None, location=None):

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'cal',
     'page',
     'event.apps.EventConfig',
+    'django_select2',
     'bootstrap_datepicker_plus',
     'bootstrap_modal_forms',
     'bootstrap4',

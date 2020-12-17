@@ -83,7 +83,7 @@ $(document).ready(function(){
     <div id='calendar'></div>
 
     {% if user.is_staff %}
-    <a href="{% url 'event:edit' %}" class="btn btn-success float-right"
+    <a href="{% url 'event:edit' calendar.id %}" class="btn btn-success float-right"
        style="margin-top: 1em;" title="{% trans 'edit' %}">
         <i class="far fa-edit"></i>
     </a>

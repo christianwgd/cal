@@ -9,7 +9,7 @@ urlpatterns = [
     path('calendar/<slug:calendar>/', views.EventCalendarView.as_view(), name='calendar'),
     path('calendar/<slug:calendar>/<slug:location>/', views.EventCalendarView.as_view(), name='calendar'),
 
-    path('edit/', views.event_edit, name='edit'),
+    path('edit/<int:pk>/', views.CalendarEdit.as_view(), name='edit'),
 
     path('events/', views.events_as_json, name='events'),
     path('events/<slug:calendar>/<slug:location>/', views.events_as_json, name='events'),

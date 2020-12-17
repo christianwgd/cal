@@ -68,10 +68,34 @@ class EventAdminForm(ModelForm):
             self.fields['category'].queryset = cal.categories.all()
 
 
+class EventForm(ModelForm):
+
+    class Meta:
+        model = Event
+        exclude = ['version', 'state', 'calendar']
+        widgets = {
+            'date': DatePickerInput(options={
+                "format": "DD.MM.YYYY",
+                "locale": lang
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        calendar = kwargs.pop('calendar', None)
+        super(EventForm, self).__init__(*args, **kwargs)
+        if calendar is not None:
+            self.fields['location'].choices = (
+                    [('','---------')] + [(l.slug, l.name) for l in calendar.locations.all()]
+            )
+            self.fields['category'].choices = (
+                    [('', '---------')] + [(l.slug, l.name) for l in calendar.categories.all()]
+            )
+
+
 class EventUpdateForm(BSModalModelForm):
     class Meta:
         model = Event
-        exclude = ['version', 'state']
+        exclude = ['version', 'state', 'calendar']
         widgets = {
             'date': DatePickerInput(options={
                 "format": "DD.MM.YYYY",

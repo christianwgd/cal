@@ -29,6 +29,7 @@ admin.sites.AdminSite.index_title = 'Index'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('select2/', include('django_select2.urls')),
 
     path('favicon\.ico', RedirectView.as_view(url='/static/icons/favicon.ico')),
     path('', RedirectView.as_view(url='/event/calendar/'), name='home'),
