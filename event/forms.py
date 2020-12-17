@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
+from bootstrap_datepicker_plus import DatePickerInput
+from bootstrap_modal_forms.forms import BSModalModelForm
+from django.conf import settings
 from django.forms import ModelForm
 from django.utils.text import slugify
 
 from event.models import Category, Location, Calendar, Event
 
+lang = getattr(settings, "LANGUAGE_CODE", 'de')
 
 class CategoryAdminForm(ModelForm):
 
@@ -62,3 +66,15 @@ class EventAdminForm(ModelForm):
             cal = Calendar.objects.get(pk=self.initial['calendar'])
             self.fields['location'].queryset = cal.locations.all()
             self.fields['category'].queryset = cal.categories.all()
+
+
+class EventUpdateForm(BSModalModelForm):
+    class Meta:
+        model = Event
+        exclude = ['version', 'state']
+        widgets = {
+            'date': DatePickerInput(options={
+                "format": "DD.MM.YYYY",
+                "locale": lang
+            }),
+        }

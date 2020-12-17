@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'cal',
     'page',
     'event.apps.EventConfig',
+    'bootstrap_datepicker_plus',
+    'bootstrap_modal_forms',
     'bootstrap4',
 ]
 
@@ -109,7 +111,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 BOOTSTRAP4 = {
-    'javascript_in_head': True,
+    'include_jquery': True,
     'theme_url': '/static/css/bootstrap.min.css',
 }
 

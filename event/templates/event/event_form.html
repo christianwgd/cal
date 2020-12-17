@@ -1,0 +1,23 @@
+{% load static i18n bootstrap4 %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+
+<div class="modal-header">
+    <h2 class="modal-title">{% trans 'Update event' %}</h2>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+       <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <form role="form" class="form-horizontal" method="post" novalidate>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button class="btn btn-primary" button_type='submit'>
+            <i class="far fa-check"></i>
+        </button>
+        <button class="btn btn-secondary" button_type='button' data-dismiss="modal">
+            <i class="far fa-times"></i>
+        </button>
+    </form>
+</div>

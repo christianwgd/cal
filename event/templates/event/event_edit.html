@@ -5,11 +5,15 @@
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% static "css/event.css" %}" />
 <link href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css" rel="stylesheet">
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+{% endblock %}
 
+{% block bootstrap4_extra_script %}
+{{ block.super }}
 <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
 <script type="text/javascript" src="{% static 'datetimepicker/moment.min.js' %}"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
 <script>
 
 function refreshLocations() {
@@ -68,13 +72,18 @@ function refreshEventList() {
                     calendar: events[event].calendar,
                     location: events[event].location,
                     category: events[event].category,
+                    edit: '<button class="btn btn-info btn-sm update" data-url="/event/update/'+events[event].id+'/"><i class="far fa-edit"></i></button>',
                     delete: '<button class="btn btn-danger btn-sm" onclick="removeEvent('+events[event].id+');return false;"><i class="far fa-trash"></i></button>'
                 };
                 table.bootstrapTable('prepend', row);
             }
+        	$(".update").each(function() {
+                $(this).modalForm({formURL: $(this).data('url'), modalID: "#updateModal"});
+            });
         },
     });
 }
+
 
 function removeEvent(event_id) {
     $.get({
@@ -163,6 +172,13 @@ $(document).ready(function(){
 {% block page_title %}{% trans 'Calendar edit' %}{% endblock %}
 
 {% block content %}
+<div class="modal fade" tabindex="-1" role="dialog" id="updateModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-dialog-scrollable">
+
+        </div>
+    </div>
+</div>
 
 <div class="form-group">
     <label for="id_calendar">{% trans 'Calendar' %}</label>
@@ -197,9 +213,14 @@ $(document).ready(function(){
     </div>
 </div>
 
-<button id="id_add" class="btn btn-success btn-sm" onclick="addEvent();" disabled>
-    <i class="far fa-plus"></i>
-</button>
+<div class="row">
+    <div class="col-12">
+        <button id="id_add" class="btn btn-success btn-sm float-right" onclick="addEvent();" disabled>
+            <i class="far fa-plus"></i>
+        </button>
+    </div>
+</div>
+
 
 
 <hr/>
@@ -214,6 +235,7 @@ $(document).ready(function(){
                 <th data-field="calendar">{% trans 'Calendar' %}</th>
                 <th data-field="location">{% trans 'Location' %}</th>
                 <th data-field="category">{% trans 'Category' %}</th>
+                <th data-field="edit" data-align="center"></th>
                 <th data-field="delete" data-align="center"></th>
             </tr>
         </thead>

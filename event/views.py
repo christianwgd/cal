@@ -3,7 +3,9 @@ import json
 import dateutil.parser
 import datetime
 
+from bootstrap_modal_forms.generic import BSModalUpdateView
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils import formats
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import ListView
@@ -12,6 +14,7 @@ from icalendar import Alarm, vText
 from icalendar import Calendar as iCalendar
 from icalendar import Event as icalEvent
 
+from event.forms import EventUpdateForm
 from event.models import (
     Event, Calendar, Location, Category,
     CONTENT_STATUS_PUBLISHED
@@ -208,3 +211,11 @@ def create_event(request, cal_slug, loc_slug, cat_slug, dat_str):
 def delete_event(request, event_id):
     Event.objects.get(pk=event_id).delete()
     return JsonResponse('Deleted', safe=False)
+
+
+class EventUpdateView(BSModalUpdateView):
+    model = Event
+    form_class = EventUpdateForm
+
+    def get_success_url(self):
+        return reverse('event:edit')
