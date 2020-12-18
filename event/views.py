@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils import formats
 from django.http import HttpResponse, JsonResponse
+from django.utils.timezone import now
 from django.views.generic import ListView, UpdateView
 
 from icalendar import Alarm, vText
@@ -61,6 +62,7 @@ class CalendarEdit(UpdateView):
         initial = super().get_initial()
         initial['location'] = self.request.GET.get('location', None)
         initial['category'] = self.request.GET.get('category', None)
+        initial['date'] = now()
         return initial
 
     def get_form_kwargs(self, *args, **kwargs):

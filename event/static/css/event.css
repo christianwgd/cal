@@ -9,3 +9,11 @@ a {
 a:hover {
     color: #333333;
 }
+
+#updateModal {
+    margin-top: 100px;
+}
+
+#updateModal .modal-body {
+    padding-bottom: 260px;
+}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-07 20:57+0100\n"
+"POT-Creation-Date: 2020-12-18 13:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,8 +30,7 @@ msgstr "Entwurf"
 msgid "Published"
 msgstr "Veröffentlicht"
 
-#: models.py:18 models.py:106 templates/event/event_edit.html:185
-#: templates/event/event_edit.html:216
+#: models.py:18 models.py:106 templates/event/event_edit.html:147
 msgid "Category"
 msgstr "Kategorie"
 
@@ -51,8 +50,7 @@ msgstr "Hintergrundfarbe"
 msgid "Color"
 msgstr "Schriftfarbe"
 
-#: models.py:33 models.py:109 templates/event/event_edit.html:178
-#: templates/event/event_edit.html:215
+#: models.py:33 models.py:109 templates/event/event_edit.html:146
 msgid "Location"
 msgstr "Ort"
 
@@ -64,8 +62,7 @@ msgstr "Orte"
 msgid "Character"
 msgstr "Buchstabe"
 
-#: models.py:50 models.py:103 templates/event/event_edit.html:168
-#: templates/event/event_edit.html:214
+#: models.py:50 models.py:103 templates/event/event_edit.html:145
 msgid "Calendar"
 msgstr "Kalender"
 
@@ -89,7 +86,7 @@ msgstr "Vorgabewert"
 msgid "Events"
 msgstr "Ereignisse"
 
-#: models.py:100 templates/event/event_edit.html:213
+#: models.py:100 templates/event/event_edit.html:144
 msgid "Date"
 msgstr "Datum"
 
@@ -132,10 +129,14 @@ msgstr ""
 "Ereignisse starten jeweils um 0 Uhr, so dass 4 Stunden einen Alarm um 20 Uhr "
 "setzen."
 
-#: templates/event/event_edit.html:163
+#: templates/event/event_edit.html:109
 msgid "Calendar edit"
 msgstr "Kalender bearbeiten"
 
-#: templates/event/event_edit.html:212
+#: templates/event/event_edit.html:143
 msgid "ID"
 msgstr ""
+
+#: templates/event/event_form.html:6
+msgid "Update event"
+msgstr "Termin ändern"
