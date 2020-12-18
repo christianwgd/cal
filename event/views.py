@@ -169,7 +169,8 @@ def event_list(request, calendar, location, category):
     events = Event.objects.filter(
         calendar__slug=calendar,
         location__slug=location,
-        category__slug=category
+        category__slug=category,
+        date__gte=now()
     ).order_by('-date')
 
     jsnEvents = []
