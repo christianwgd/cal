@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 import json
-import dateutil.parser
 import datetime
+from dateutil import parser, relativedelta
 
 from bootstrap_modal_forms.generic import BSModalUpdateView
-from django.shortcuts import render
 from django.urls import reverse
 from django.utils import formats
 from django.http import HttpResponse, JsonResponse
-from django.utils.timezone import now
+from django.utils import timezone
 from django.views.generic import ListView, UpdateView
 
 from icalendar import Alarm, vText
@@ -62,7 +61,7 @@ class CalendarEdit(UpdateView):
         initial = super().get_initial()
         initial['location'] = self.request.GET.get('location', None)
         initial['category'] = self.request.GET.get('category', None)
-        initial['date'] = now()
+        initial['date'] = timezone.now()
         return initial
 
     def get_form_kwargs(self, *args, **kwargs):
@@ -75,8 +74,8 @@ def events_as_json(request, calendar=None, location=None):
 
     start_str = request.GET['start']
     end_str = request.GET['end']
-    von = dateutil.parser.parse(start_str)
-    bis =  dateutil.parser.parse(end_str)
+    von = parser.parse(start_str)
+    bis =  parser.parse(end_str)
 
     cal = []
     if calendar and location:
@@ -109,7 +108,7 @@ def sync_ical(request, cal_slug, location=None, alarm_time=None):
 
     calendar = Calendar.objects.get(slug=cal_slug)
 
-    now = datetime.datetime.now()
+    now = timezone.now() - relativedelta.relativedelta(weeks=1)
     if location:
         events = Event.objects.filter(
             calendar=calendar,
@@ -170,7 +169,7 @@ def event_list(request, calendar, location, category):
         calendar__slug=calendar,
         location__slug=location,
         category__slug=category,
-        date__gte=now()
+        date__gte=timezone.now()
     ).order_by('-date')
 
     jsnEvents = []
