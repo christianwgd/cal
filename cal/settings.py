@@ -110,6 +110,9 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# Django3.2 change of pk fields
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 BOOTSTRAP4 = {
     'include_jquery': True,
     'theme_url': '/static/css/bootstrap.min.css',
