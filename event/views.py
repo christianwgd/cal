@@ -170,7 +170,7 @@ def event_list(request, calendar, location, category):
         location__slug=location,
         category__slug=category,
         date__gte=timezone.now()
-    ).order_by('-date')
+    ).order_by('date')
 
     jsnEvents = []
     for event in events:
