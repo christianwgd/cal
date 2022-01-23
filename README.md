@@ -1,4 +1,4 @@
-# cal
+# Cal
 Calendar app for garbage collection etc. with ical api 
 
 Although i created this django app to manage the local garbage collection any kind of events can be managed.
@@ -9,6 +9,7 @@ To run the app create a virtual environent and install dependencies from require
 
 ```
 pip install -U -r requirements.txt
+```
 
 Create a localsettings.py in the cal directory right next to the settings.py file. It should include a 
 new generated secret key in the "SECRET_KEY setting , the "ALLOWED_HOSTS", "DEBUG" and "DATABASE" setting.
@@ -49,6 +50,3 @@ Start the development server with
 ```
 python manage.py runserver
 ```
-
-
-python manage.py migrate
