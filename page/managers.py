@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from orderable.managers import OrderableManager
-from django.utils.translation import gettext_lazy as _
+from django.db.models import Manager
 
 
-class PagePublishedManager(OrderableManager):
+class PagePublishedManager(Manager):
     """
     For non-staff users, return items with a published status.
     """

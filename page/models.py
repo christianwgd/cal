@@ -5,10 +5,9 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 from ckeditor_uploader.fields import RichTextUploadingField
-from orderable.models import Orderable
-
 
 from page.managers import PagePublishedManager
+
 
 CONTENT_STATUS_DRAFT = 1
 CONTENT_STATUS_PUBLISHED = 2
@@ -26,14 +25,15 @@ MENU_POSITION_CHOICES = (
     (MENU_BOTTOM, _('Footer menu')),
 )
 
-class Page(Orderable):
+class Page(models.Model):
     """
     A html page.
     """
 
-    class Meta(Orderable.Meta):
+    class Meta:
         verbose_name = _("Page")
         verbose_name_plural = _("Pages")
+        ordering = ['sort_order']
 
     name = models.CharField(max_length=50, verbose_name=_('name'))
     slug = models.SlugField(max_length=200)
@@ -48,6 +48,7 @@ class Page(Orderable):
             "on the site."))
     menu = models.IntegerField(_("menu"), default=MENU_NONE,
         choices=MENU_POSITION_CHOICES)
+    sort_order = models.PositiveSmallIntegerField(default=0)
 
 
     objects = PagePublishedManager()
