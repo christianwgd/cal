@@ -34,3 +34,4 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ['date', 'calendar', 'category']
     list_filter = ['calendar', 'location', 'category']
     form = EventAdminForm
+    date_hierarchy = 'date'
