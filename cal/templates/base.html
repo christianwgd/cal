@@ -1,11 +1,8 @@
-{% extends 'bootstrap4/bootstrap4.html' %}
-{% load bootstrap4 static i18n page_tags %}
+{% extends 'django_bootstrap5/bootstrap5.html' %}
+{% load django_bootstrap5 static i18n page_tags %}
 
-{% block bootstrap4_extra_head %}
+{% block bootstrap5_extra_head %}
 {{ block.super }}
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
 <link rel="stylesheet" href="{% static 'font-awesome-5/css/all.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" >
 
@@ -30,17 +27,22 @@
 <meta name="theme-color" content="#ffffff">
 {% endblock %}
 
-{% block bootstrap4_title %}{% endblock %}
+{% block bootstrap5_extra_script %}
+{{ block.super }}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block bootstrap5_title %}{% endblock %}
 {% block title %}{% endblock %}
 
-{% block bootstrap4_content %}
+{% block bootstrap5_content %}
 
 <!-- Content -->
 <div class="container" id="id_content">
 
     <div class="row">
         <div class="col-12">
-            <img src="{% static 'img/senden-logo.png' %}" class="float-right">
+            <img src="{% static 'img/senden-logo.png' %}" class="float-end">
             <h1 class="page_title">{% block page_title %}{% endblock %}</h1>
 
             <hr class="narrow" />

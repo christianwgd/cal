@@ -1,14 +1,16 @@
 {% extends "base.html" %}
-{% load static bootstrap4 l10n i18n event_tags %}
+{% load static django_bootstrap5 l10n i18n event_tags %}
 
-{% block bootstrap4_extra_head %}
+{% block bootstrap5_extra_head %}
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% static "css/event.css" %}" />
-
 <link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/packages/core/main.css' %}" media="all">
 <link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/packages/bootstrap/main.css' %}" media="all">
 <link rel="stylesheet" type="text/css" href="{% static 'fullcalendar/packages/daygrid/main.css' %}" media="all">
+{% endblock %}
 
+{% block bootstrap5_extra_script %}
+{{ block.super }}
 <script src="{% static 'fullcalendar/packages/core/main.js' %}"></script>
 <script src="{% static 'fullcalendar/packages/bootstrap/main.js' %}"></script>
 <script src="{% static 'fullcalendar/packages/daygrid/main.js' %}"></script>
@@ -78,71 +80,68 @@ $(document).ready(function(){
 {% block page_title %}{{ calendar.name }}{% endblock %}
 
 {% block content %}
+<input class="hidden" id="calendar_id" value="{{ calendar.slug }}">
+<div id='calendar'></div>
 
-    <input class="hidden" id="calendar_id" value="{{ calendar.slug }}">
-    <div id='calendar'></div>
+{% if user.is_staff %}
+<a href="{% url 'event:edit' calendar.id %}" class="btn btn-success float-end"
+   style="margin-top: 1em;" title="{% trans 'edit' %}">
+    <i class="far fa-edit"></i>
+</a>
+{% endif %}
 
-    {% if user.is_staff %}
-    <a href="{% url 'event:edit' calendar.id %}" class="btn btn-success float-right"
-       style="margin-top: 1em;" title="{% trans 'edit' %}">
-        <i class="far fa-edit"></i>
-    </a>
-    {% endif %}
-
-    <div class="row">
-        <div class="col-lg-6">
-            <table>
-                <tbody>
-                    {% for loc in locations %}
-                    <tr>
-                        <td>{{ loc.name }}</td>
-                        <td>
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox"
-                                       class="custom-control-input"
-                                       id="{{ loc.slug }}"
-                                       {% is_default loc.slug def_loc calendar.def_loc.slug %}>
-                                <label class="custom-control-label" for="{{ loc.slug }}"></label>
-                            </div>
-                        </td>
-                        <td style="min-width: 8rem; text-align: center;">
-                            <a href="webcal://{{ request.get_host }}/event/ical/abfuhrkalender/{{ loc.slug }}/"
-                               class="caldavlink">
-                                <i class="fal fa-external-link"></i>
-                                {% trans 'subscribe' %}
-                            </a>
-                        </td>
-                        <td style="min-width: 8rem; text-align: center;">
-                            <a href="http://{{ request.get_host }}/event/ical/abfuhrkalender/{{ loc.slug }}/"
-                               class="caldavlink">
-                                <i class="fal fa-download"></i>
-                                {% trans 'import' %}
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div class="col-lg-6">
-            <div class="form-group">
-                <label for="id_alarm">{% trans 'Alarm' %}</label>
-                <div class="input-group date" data-target-input="nearest">
-                    <input type="number" class="form-control" id="id_alarm" min="1" max="30" step="1" value="16"/>
-                    <div class="input-group-append" data-target="#id_alarm">
-                        <div class="input-group-text"><i class="fal fa-alarm-clock"></i></div>
-                    </div>
-                </div>
-                <small id="passwordHelpBlock" class="form-text text-muted">
-                    {% blocktrans trimmed %}
-                        Time in hours at which the alarm should be set before the event.
-                        The event starts at 0:00, so 4 hours means alarm at 8 p.m.
-                    {% endblocktrans %}
-                </small>
-
-            </div>
-        </div>
+<div class="row">
+    <div class="col-lg-6">
+        <table>
+            <tbody>
+                {% for loc in locations %}
+                <tr>
+                    <td>{{ loc.name }}</td>
+                    <td>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox"
+                                   class="custom-control-input"
+                                   id="{{ loc.slug }}"
+                                   {% is_default loc.slug def_loc calendar.def_loc.slug %}>
+                            <label class="custom-control-label" for="{{ loc.slug }}"></label>
+                        </div>
+                    </td>
+                    <td style="min-width: 8rem; text-align: center;">
+                        <a href="webcal://{{ request.get_host }}/event/ical/abfuhrkalender/{{ loc.slug }}/"
+                           class="caldavlink">
+                            <i class="fal fa-external-link"></i>
+                            {% trans 'subscribe' %}
+                        </a>
+                    </td>
+                    <td style="min-width: 8rem; text-align: center;">
+                        <a href="http://{{ request.get_host }}/event/ical/abfuhrkalender/{{ loc.slug }}/"
+                           class="caldavlink">
+                            <i class="fal fa-download"></i>
+                            {% trans 'import' %}
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
+    <div class="col-lg-6">
+        <label for="id_alarm">{% trans 'Alarm' %}</label>
+        <div class="input-group date" data-target-input="nearest">
+            <input type="number" class="form-control" id="id_alarm" min="1" max="30" step="1" value="16"/>
+            <div class="input-group-append" data-target="#id_alarm">
+                <div class="input-group-text"><i class="fal fa-alarm-clock"></i></div>
+            </div>
+        </div>
+        <p class="small" id="passwordHelpBlock" class="form-text text-muted">
+            {% blocktrans trimmed %}
+                Time in hours at which the alarm should be set before the event.
+                The event starts at 0:00, so 4 hours means alarm at 8 p.m.
+            {% endblocktrans %}
+        </p>
+
+    </div>
+
+</div>
 {% endblock %}

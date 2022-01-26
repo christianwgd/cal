@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% load static bootstrap4 l10n i18n  %}
+{% load static django_bootstrap5 l10n i18n  %}
 
-{% block bootstrap4_extra_head %}
+{% block bootstrap5_extra_head %}
 {{ block.super }}
 {{ form.media.css }}
 <link rel="stylesheet" type="text/css" href="{% static "css/event.css" %}" />
 <link href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css" rel="stylesheet">
 {% endblock %}
 
-{% block bootstrap4_extra_script %}
+{% block bootstrap5_extra_script %}
 {{ block.super }}
 <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
@@ -119,8 +119,8 @@ $(document).ready(function(){
 
 <h4>{{ calendar.name }}</h4>
 
-{% bootstrap_field form.location %}
-{% bootstrap_field form.category %}
+{% bootstrap_field form.location layout='floating' %}
+{% bootstrap_field form.category layout='floating' %}
 {% bootstrap_field form.date %}
 
 <div class="row">

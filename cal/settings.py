@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'event.apps.EventConfig',
     'bootstrap_datepicker_plus',
     'bootstrap_modal_forms',
-    'bootstrap4',
+    'django_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -113,8 +113,7 @@ MEDIA_URL = '/media/'
 # Django3.2 change of pk fields
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-BOOTSTRAP4 = {
-    'include_jquery': True,
+BOOTSTRAP5 = {
     'theme_url': '/static/css/bootstrap.min.css',
 }
 
