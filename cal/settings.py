@@ -20,6 +20,7 @@ PROJECT_APP = os.path.basename(PROJECT_APP_PATH)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
+CSRF_TRUSTED_ORIGINS = ['https://abfuhrkalender-senden.wgdnet.de/']
 
 # Application definition
 
