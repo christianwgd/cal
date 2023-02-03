@@ -1,5 +1,5 @@
 beautifulsoup4==4.11.1
-Django==4.1.4
+Django==4.1.6
 django-admin-sortable2==2.1.4
 django-bootstrap5==22.2
 django-bootstrap-datepicker-plus==5.0.2
