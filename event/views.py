@@ -9,6 +9,7 @@ from django.utils import formats
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from django.views.generic import ListView, UpdateView
+from django.utils.translation import gettext_lazy as _
 
 from icalendar import Alarm, vText
 from icalendar import Calendar as iCalendar
@@ -235,6 +236,7 @@ def delete_event(request, event_id):
 class EventUpdateView(BSModalUpdateView):
     model = Event
     form_class = EventUpdateForm
+    success_message = _('Event updated')
 
     def get_success_url(self):
         form = self.get_form()

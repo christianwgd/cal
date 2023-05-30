@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-18 13:27+0100\n"
+"POT-Creation-Date: 2023-05-30 22:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,15 +104,15 @@ msgstr ""
 msgid "Version"
 msgstr ""
 
-#: templates/event/event_calendar.html:87
+#: templates/event/event_calendar.html:88
 msgid "edit"
 msgstr "bearbeiten"
 
-#: templates/event/event_calendar.html:112
+#: templates/event/event_calendar.html:113
 msgid "subscribe"
 msgstr "abonnieren"
 
-#: templates/event/event_calendar.html:119
+#: templates/event/event_calendar.html:120
 msgid "import"
 msgstr "importieren"
 
@@ -137,6 +137,10 @@ msgstr "Kalender bearbeiten"
 msgid "ID"
 msgstr ""
 
-#: templates/event/event_form.html:6
+#: templates/event/event_form.html:5
 msgid "Update event"
 msgstr "Termin ändern"
+
+#: views.py:239
+msgid "Event updated"
+msgstr "Ereignis geändert"
