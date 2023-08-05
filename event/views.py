@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 import json
 import datetime
+
+import requests
 from dateutil import parser, relativedelta
 
 from bootstrap_modal_forms.generic import BSModalUpdateView
+from django.conf import settings
 from django.urls import reverse
 from django.utils import formats
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
+from django.utils.text import slugify
+from django.utils.timezone import now
 from django.views.generic import ListView, UpdateView
 from django.utils.translation import gettext_lazy as _
 
@@ -17,8 +22,8 @@ from icalendar import Event as icalEvent
 
 from event.forms import EventUpdateForm, EventForm
 from event.models import (
-    Event, Calendar, Location, Category,
-    CONTENT_STATUS_PUBLISHED
+    Event, Calendar, Category,
+    CONTENT_STATUS_PUBLISHED, Street, City
 )
 
 
@@ -29,22 +34,17 @@ class EventCalendarView(ListView):
     def get_context_data(self, **kwargs):
         context = super(EventCalendarView, self).get_context_data(**kwargs)
         if 'calendar' in self.kwargs:
-
-                context['calendar'] = Calendar.objects.get(
-                    slug=self.kwargs['calendar']
-                )
+            context['calendar'] = Calendar.objects.get(
+                slug=self.kwargs['calendar']
+            )
         else:
             try:
                 context['calendar'] = Calendar.objects.get(
                     default=True
                 )
-            except:
+            except Calendar.DoesNotExist:
                 context['calendar'] = Calendar.objects.first()
-
-        if context['calendar'] is not None:
-            context['locations'] = context['calendar'].locations.all()
-            if 'location' in self.kwargs:
-                context['def_loc'] = self.kwargs['location']
+        context['calendars'] = Calendar.objects.all()
         return context
 
 
@@ -71,18 +71,16 @@ class CalendarEdit(UpdateView):
         return form_kwargs
 
 
-def events_as_json(request, calendar=None, location=None):
-
+def events_as_json(request, calendar=None):
     start_str = request.GET['start']
     end_str = request.GET['end']
     von = parser.parse(start_str)
     bis =  parser.parse(end_str)
 
     cal = []
-    if calendar and location:
+    if calendar:
         events = Event.objects.filter(
             calendar__slug=calendar,
-            location__slug=location,
             date__range=(von, bis),
             state=CONTENT_STATUS_PUBLISHED
         ).order_by('date')
@@ -93,7 +91,9 @@ def events_as_json(request, calendar=None, location=None):
         ).order_by('date')
     for event in events:
         cal_item = {
-            'title': '$ICON {}'.format(event.location),
+            'title': '$ICON {}\n{}, {}'.format(
+                event.category.name, event.calendar.street, event.calendar.street.city
+            ),
             'start': formats.date_format(event.date, 'Y-m-d'),
             'icon': event.calendar.icon,
             'textColor': event.category.color,
@@ -110,19 +110,11 @@ def sync_ical(request, cal_slug, location=None, alarm_time=None):
     calendar = Calendar.objects.get(slug=cal_slug)
 
     now = timezone.now() - relativedelta.relativedelta(weeks=1)
-    if location:
-        events = Event.objects.filter(
-            calendar=calendar,
-            location__slug=location,
-            date__gte=now,
-            state=CONTENT_STATUS_PUBLISHED
-        ).order_by('date')
-    else:
-        events = Event.objects.filter(
-            calendar__slug=calendar,
-            date__gte=now,
-            state=CONTENT_STATUS_PUBLISHED
-        ).order_by('date')
+    events = Event.objects.filter(
+        calendar=calendar,
+        date__gte=now,
+        state=CONTENT_STATUS_PUBLISHED
+    ).order_by('date')
 
     if alarm_time is None:
         alarm_time = 16
@@ -164,27 +156,25 @@ def sync_ical(request, cal_slug, location=None, alarm_time=None):
     return response
 
 
-def event_list(request, calendar, location, category):
+def event_list(request, calendar, category):
 
     events = Event.objects.filter(
         calendar__slug=calendar,
-        location__slug=location,
         category__slug=category,
         date__gte=timezone.now()
     ).order_by('date')
 
-    jsnEvents = []
+    jsn_events = []
     for event in events:
-        jsnEvent = {
+        jsn_event = {
             'id': event.id,
             'date': formats.date_format(event.date, "SHORT_DATE_FORMAT"),
             'calendar': event.calendar.name,
-            'location': event.location.name,
             'category': event.category.name
         }
-        jsnEvents.append(jsnEvent)
+        jsn_events.append(jsn_event)
 
-    return JsonResponse(jsnEvents, safe=False)
+    return JsonResponse(jsn_events, safe=False)
 
 
 def get_location_options(request, cal_slug):
@@ -213,15 +203,13 @@ def get_category_options(request, cal_slug):
     return JsonResponse(cat_options, safe=False)
 
 
-def create_event(request, cal_slug, loc_slug, cat_slug, dat_str):
+def create_event(request, cal_slug, cat_slug, dat_str):
     date = datetime.datetime.strptime(dat_str, '%d.%m.%Y')
     calendar = Calendar.objects.get(slug=cal_slug)
-    location = Location.objects.get(slug=loc_slug)
     category = Category.objects.get(slug=cat_slug)
     Event.objects.create(
         date=date,
         calendar=calendar,
-        location=location,
         category=category,
         state=CONTENT_STATUS_PUBLISHED
     )
@@ -240,10 +228,105 @@ class EventUpdateView(BSModalUpdateView):
 
     def get_success_url(self):
         form = self.get_form()
-        loc = Location.objects.get(pk=form.data['location'])
         cat = Category.objects.get(pk=form.data['category'])
-        return '{url}?location={loc}&category={cat}'.format(
+        return '{url}?category={cat}'.format(
             url=reverse('event:edit', kwargs={ 'pk': self.object.calendar.id }),
-            loc=loc.slug,
             cat=cat.slug,
         )
+
+
+def call_api(url):
+    base_url = getattr(settings, 'API_BASE_URL', None)
+    if not base_url:
+        msg = 'No API_BASE_URL configured!'
+        raise ImportError(msg)
+    url = base_url + url
+    r = requests.get(url, timeout=20)
+    if r.status_code == 200:
+        return r.json()
+    return None
+
+
+def update_cities():
+    # https://coe-abfallapp.regioit.de/abfall-app-coe/rest/orte
+    cities = call_api('orte')
+    for city in cities:
+        location, created = City.objects.get_or_create(
+            id=city['id'],
+            defaults={
+                'name': city['name'],
+                'slug': slugify(city['name']),
+            }
+        )
+        if not created:
+            location.name = city['name']
+            location.slug = slugify(location.name)
+            location.save()
+
+def update_streets(city):
+    # https://coe-abfallapp.regioit.de/abfall-app-coe/rest/orte/1216636/strassen
+    streets = call_api(f'orte/{city.id}/strassen')
+    for street in streets:
+        location, created = Street.objects.get_or_create(
+            id=street['id'],
+            defaults={
+                'name': street['name'],
+                'slug': slugify(street['name']),
+                'city': city
+            }
+        )
+        if not created:
+            location.name = street['name']
+            location.slug = slugify(location.name)
+            location.city = city
+            location.save()
+
+
+def update_categories():
+    # https://coe-abfallapp.regioit.de/abfall-app-coe/rest/fraktionen
+    categories = call_api('fraktionen')
+    for cat in categories:
+        category, created = Category.objects.get_or_create(
+            id=cat['id'],
+            defaults={
+                'name': cat['name'],
+                'slug': slugify(cat['name']),
+                'bg_color': f"#{cat['farbeRgb']}"
+            }
+        )
+        if not created:
+            category.name = cat['name']
+            category.slug = slugify(category.name)
+            category.bg_color = f"#{cat['farbeRgb']}"
+            category.color = category.get_color()
+            category.save()
+
+
+def update_events(calendar):
+    events = call_api(f'strassen/{calendar.street.id}/termine')
+    for termin in events:
+        if Category.objects.filter(id=termin['bezirk']['fraktionId']).exists():
+            category = Category.objects.get(id=termin['bezirk']['fraktionId'])
+            if category in calendar.categories.all():
+                date = datetime.datetime.strptime(termin['datum'], '%Y-%m-%d')
+                if date.date() > now().date():
+                    event, created = Event.objects.get_or_create(
+                        id=termin['id'],
+                        defaults={
+                            'date': date,
+                            'calendar': calendar,
+                            'category': category,
+                            'state': CONTENT_STATUS_PUBLISHED
+                        }
+                    )
+                    if not created:
+                        changed = False
+                        if event.date != date:
+                            event.date = date
+                            changed = True
+                        if event.category != category:
+                            event.category = category
+                            changed = True
+                        if changed:
+                            event.version += 1
+                            event.save()

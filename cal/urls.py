@@ -28,14 +28,15 @@ admin.sites.AdminSite.index_title = 'Index'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('chaining/', include('smart_selects.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 
-    path('favicon\.ico', RedirectView.as_view(url='/static/icons/favicon.ico')),
+    path('favicon.ico', RedirectView.as_view(url='/static/icons/favicon.ico')),
     path('', RedirectView.as_view(url='/event/calendar/'), name='home'),
 
     path('page/', include('page.urls')),
     path('event/', include('event.urls')),
 ]
-if settings.DEBUG == True:
+if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -6,6 +6,6 @@ from page.models import Page
 
 @admin.register(Page)
 class PageAdmin(SortableAdminMixin, admin.ModelAdmin):
-    
+
     list_display = ['title', 'status', 'menu']
     exclude = ['slug']

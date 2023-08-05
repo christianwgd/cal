@@ -21,7 +21,7 @@ function refreshEventList() {
     var location = $('#id_location').val();
     var category = $('#id_category').val();
     $.ajax({
-    	url: '/event/list/'+calendar+'/'+location+'/'+category+'/',
+    	url: '/event/list/'+calendar+'/'+category+'/',
         type: 'get',
         dataType: 'json',
         success: function (events) {
@@ -57,12 +57,11 @@ function removeEvent(event_id) {
 
 function addEvent() {
     var date = $('#id_date').val();
-    var location = $('#id_location').val();
     var category = $('#id_category').val();
     var table = $('#id_events');
 
     $.get({
-        url: '/event/create/' + calendar + '/' + location + '/' + category + '/' + date + '/',
+        url: '/event/create/' + calendar + '/' + category + '/' + date + '/',
         success: function (id) {
             refreshEventList();
         }
@@ -72,7 +71,6 @@ function addEvent() {
 
 function toggleButtons() {
     var table = $('#id_events');
-    var location = $('#id_location').val();
     var category = $('#id_category').val();
 
     if (location === '' || category === '') {
@@ -89,15 +87,10 @@ function toggleButtons() {
 
 $(document).ready(function(){
     calendar = "{{ calendar.slug }}";
-    var location = $('#id_location').val();
     var category = $('#id_category').val();
     if (location !== '' && category !== '') {
         refreshEventList();
     }
-
-    $('#id_location').change(function() {
-        toggleButtons();
-    });
     $('#id_category').change(function() {
         toggleButtons();
     });
@@ -119,7 +112,6 @@ $(document).ready(function(){
 
 <h4>{{ calendar.name }}</h4>
 
-{% bootstrap_field form.location layout='floating' %}
 {% bootstrap_field form.category layout='floating' %}
 {% bootstrap_field form.date %}
 
@@ -143,7 +135,6 @@ $(document).ready(function(){
                 <th data-field="id">{% trans 'ID' %}</th>
                 <th data-field="date">{% trans 'Date' %}</th>
                 <th data-field="calendar">{% trans 'Calendar' %}</th>
-                <th data-field="location">{% trans 'Location' %}</th>
                 <th data-field="category">{% trans 'Category' %}</th>
                 <th data-field="edit" data-align="center"></th>
                 <th data-field="delete" data-align="center"></th>

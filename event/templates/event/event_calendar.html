@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static django_bootstrap5 l10n i18n event_tags %}
+{% load static django_bootstrap5 l10n i18n %}
 
 {% block bootstrap5_extra_head %}
 {{ block.super }}
@@ -22,7 +22,7 @@ function getEventSources() {
     var sources = [];
     $(".custom-control-input:checked").each(function() {
         sources.push(
-            '/event/events/'+$('#calendar_id').val()+'/'+$(this).attr('id')+'/'
+            '/event/events/'+$(this).attr('id')+'/'
         );
     });
     return sources;
@@ -77,7 +77,7 @@ $(document).ready(function(){
 </script>
 {% endblock %}
 
-{% block page_title %}{{ calendar.name }}{% endblock %}
+{% block page_title %}Abfuhrkalender{% endblock %}
 
 {% block content %}
 <input class="hidden" id="calendar_id" value="{{ calendar.slug }}">
@@ -94,27 +94,27 @@ $(document).ready(function(){
     <div class="col-lg-6">
         <table>
             <tbody>
-                {% for loc in locations %}
+                {% for cal in calendars %}
                 <tr>
-                    <td>{{ loc.name }}</td>
+                    <td>{{ cal.name }}</td>
                     <td>
                         <div class="custom-control custom-switch">
                             <input type="checkbox"
                                    class="custom-control-input"
-                                   id="{{ loc.slug }}"
-                                   {% is_default loc.slug def_loc calendar.def_loc.slug %}>
-                            <label class="custom-control-label" for="{{ loc.slug }}"></label>
+                                   id="{{ cal.slug }}"
+                                   {% if cal.default %}checked{% endif %}>
+                            <label class="custom-control-label" for="{{ cal.slug }}"></label>
                         </div>
                     </td>
                     <td style="min-width: 8rem; text-align: center;">
-                        <a href="webcal://{{ request.get_host }}/event/ical/abfuhrkalender/{{ loc.slug }}/"
+                        <a href="webcal://{{ request.get_host }}/event/ical/abfuhrkalender/{{ cal.slug }}/"
                            class="caldavlink">
                             <i class="fal fa-external-link"></i>
                             {% trans 'subscribe' %}
                         </a>
                     </td>
                     <td style="min-width: 8rem; text-align: center;">
-                        <a href="http://{{ request.get_host }}/event/ical/abfuhrkalender/{{ loc.slug }}/"
+                        <a href="http://{{ request.get_host }}/event/ical/abfuhrkalender/{{ cal.slug }}/"
                            class="caldavlink">
                             <i class="fal fa-download"></i>
                             {% trans 'import' %}

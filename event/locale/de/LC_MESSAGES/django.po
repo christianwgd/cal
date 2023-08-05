@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-30 22:35+0200\n"
+"POT-Creation-Date: 2023-08-05 19:17+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,89 +18,125 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: apps.py:7 models.py:83
-msgid "Event"
-msgstr "Ereignis"
+#: admin.py:18
+msgid "Update categories"
+msgstr "Kategorien aktualisiern"
 
-#: models.py:10
+#: admin.py:21
+msgid "Categories updated."
+msgstr "Kategorien aktualisiert."
+
+#: admin.py:32
+msgid "Update cities"
+msgstr "Städte aktualisieren"
+
+#: admin.py:35
+msgid "Cities updated."
+msgstr "Städte aktualisiert."
+
+#: admin.py:37
+msgid "Update streets for selected city"
+msgstr "Straßen für ausgewählte Städte aktualisieren"
+
+#: admin.py:41
+msgid "Streets updated."
+msgstr "Straßen aktualisiert."
+
+#: admin.py:51
+msgid "Update events for selected calendars"
+msgstr "Termine für ausgewählte Kalender aktualisieren"
+
+#: admin.py:55
+msgid "Events updated."
+msgstr "Termine aktualisiert."
+
+#: apps.py:7 models.py:111
+msgid "Event"
+msgstr "Termin"
+
+#: models.py:14
 msgid "Draft"
 msgstr "Entwurf"
 
-#: models.py:11
+#: models.py:15
 msgid "Published"
 msgstr "Veröffentlicht"
 
-#: models.py:18 models.py:106 templates/event/event_edit.html:147
+#: models.py:21 models.py:135 templates/event/event_edit.html:147
 msgid "Category"
 msgstr "Kategorie"
 
-#: models.py:19 models.py:65
+#: models.py:22 models.py:97
 msgid "Categories"
 msgstr "Kategorien"
 
-#: models.py:24 models.py:39 models.py:64
+#: models.py:44 models.py:60 models.py:74 models.py:96
 msgid "Name"
 msgstr ""
 
-#: models.py:25
+#: models.py:45
 msgid "Background color"
 msgstr "Hintergrundfarbe"
 
-#: models.py:26
+#: models.py:46
 msgid "Color"
 msgstr "Schriftfarbe"
 
-#: models.py:33 models.py:109 templates/event/event_edit.html:146
-msgid "Location"
-msgstr "Ort"
+#: models.py:53 models.py:76
+msgid "City"
+msgstr "Stadt"
 
-#: models.py:34 models.py:66
-msgid "Locations"
-msgstr "Orte"
+#: models.py:54
+msgid "Cities"
+msgstr "Städte"
 
-#: models.py:41
-msgid "Character"
-msgstr "Buchstabe"
+#: models.py:67 models.py:98
+msgid "Street"
+msgstr "Straße"
 
-#: models.py:50 models.py:103 templates/event/event_edit.html:145
+#: models.py:68
+msgid "Streets"
+msgstr "Straßen"
+
+#: models.py:82 models.py:131 templates/event/event_edit.html:145
 msgid "Calendar"
 msgstr "Kalender"
 
-#: models.py:51
+#: models.py:83
 msgid "Calendars"
 msgstr "Kalender"
 
-#: models.py:68
-msgid "Default location"
-msgstr "Vorgabeort"
-
-#: models.py:73
+#: models.py:100
 msgid "Icon"
 msgstr "Symbol"
 
-#: models.py:77
+#: models.py:104
 msgid "Default"
 msgstr "Vorgabewert"
 
-#: models.py:84
-msgid "Events"
-msgstr "Ereignisse"
+#: models.py:105
+msgid "Owner"
+msgstr "Besitzer"
 
-#: models.py:100 templates/event/event_edit.html:144
+#: models.py:112
+msgid "Events"
+msgstr "Termine"
+
+#: models.py:128 templates/event/event_edit.html:144
 msgid "Date"
 msgstr "Datum"
 
-#: models.py:113
+#: models.py:138
 msgid "State"
 msgstr "Status"
 
-#: models.py:115
+#: models.py:140
 msgid "With Draft chosen, will only be shown for admin users on the site."
 msgstr ""
 "Wenn Entwurf ausgewählt wird, wird dieses Element nur Administratoren "
 "angezeigt werden."
 
-#: models.py:118
+#: models.py:143
 msgid "Version"
 msgstr ""
 
@@ -137,10 +173,14 @@ msgstr "Kalender bearbeiten"
 msgid "ID"
 msgstr ""
 
+#: templates/event/event_edit.html:146
+msgid "Location"
+msgstr "Ort"
+
 #: templates/event/event_form.html:5
 msgid "Update event"
 msgstr "Termin ändern"
 
-#: views.py:239
+#: views.py:230
 msgid "Event updated"
 msgstr "Ereignis geändert"

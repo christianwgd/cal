@@ -2,12 +2,12 @@
 !requirements.txt
 !.gitignore
 .idea/
+.ruff_cache
 media/
 __pycache__/
 localsettings.py
 .vscode
 *.pyc
-localsettings.py
 *.db
 log/
 *.json

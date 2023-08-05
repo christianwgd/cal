@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'cal',
     'page',
     'event.apps.EventConfig',
+    'smart_selects',
     'bootstrap_datepicker_plus',
     'bootstrap_modal_forms',
     'django_bootstrap5',
@@ -140,6 +141,11 @@ CKEDITOR_RESTRICT_BY_USER = True
 CKEDITOR_BROWSE_SHOW_DIRS = True
 CKEDITOR_ALLOW_NONIMAGE_FILES = False
 
+API_BASE_URL = 'https://coe-abfallapp.regioit.de/abfall-app-coe/rest/'
+
+# django-smart-selects needs jQuery
+USE_DJANGO_JQUERY = True
+
 ##################
 # LOCAL SETTINGS #
 ##################
@@ -160,5 +166,5 @@ if os.path.exists(f):
     module = importlib.import_module(module_name)
     module.__file__ = f
     sys.modules[module_name] = module
-    exec(open(f, "rb").read())
+    exec(open(f, "rb").read())  # noqa: S102
 

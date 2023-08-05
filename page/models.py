@@ -38,7 +38,7 @@ class Page(models.Model):
     name = models.CharField(max_length=50, verbose_name=_('name'))
     slug = models.SlugField(max_length=200)
     title = models.CharField(max_length=200, verbose_name=_("title"))
-    icon = models.CharField(max_length=20, verbose_name=_("icon"), 
+    icon = models.CharField(max_length=20, verbose_name=_("icon"),
         null=True, blank=True)
     content = RichTextUploadingField(verbose_name=_("Content"), null=True, blank=True)
 
