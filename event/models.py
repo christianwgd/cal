@@ -125,7 +125,7 @@ class Street(models.Model):
     def __str__(self):
         return f'{self.name}, {self.city}'
 
-    name = models.CharField(max_length=100, verbose_name=_('Name'))
+    name = models.CharField(max_length=255, verbose_name=_('Name'))
     slug = models.SlugField(blank=True, null=True)
     city = models.ForeignKey(City, verbose_name=_('City'), on_delete=models.CASCADE)
 
