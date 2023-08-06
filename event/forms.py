@@ -26,7 +26,7 @@ class EventForm(ModelForm):
         super(EventForm, self).__init__(*args, **kwargs)
         if calendar is not None:
             self.fields['category'].choices = (
-                    [('', '---------')] + [(l.slug, l.name) for l in calendar.categories.all()]
+                [('', '---------')] + [(cat.slug, cat.name) for cat in calendar.categories.all()]
             )
 
 

@@ -2,17 +2,13 @@
 import json
 import datetime
 
-import requests
 from dateutil import parser, relativedelta
 
 from bootstrap_modal_forms.generic import BSModalUpdateView
-from django.conf import settings
 from django.urls import reverse
 from django.utils import formats
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
-from django.utils.text import slugify
-from django.utils.timezone import now
 from django.views.generic import ListView, UpdateView
 from django.utils.translation import gettext_lazy as _
 
@@ -23,7 +19,7 @@ from icalendar import Event as icalEvent
 from event.forms import EventUpdateForm, EventForm
 from event.models import (
     Event, Calendar, Category,
-    CONTENT_STATUS_PUBLISHED, Street, City
+    CONTENT_STATUS_PUBLISHED
 )
 
 
