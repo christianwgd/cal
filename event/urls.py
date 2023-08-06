@@ -6,9 +6,6 @@ app_name = 'event'
 
 urlpatterns = [
     path('calendar/', views.EventCalendarView.as_view(), name='calendar'),
-    path('calendar/<slug:calendar>/', views.EventCalendarView.as_view(), name='calendar'),
-    path('calendar/<slug:calendar>/<slug:location>/', views.EventCalendarView.as_view(), name='calendar'),
-
     path('edit/<int:pk>/', views.CalendarEdit.as_view(), name='edit'),
 
     path('events/', views.events_as_json, name='events'),
@@ -17,8 +14,7 @@ urlpatterns = [
     path('list/<slug:calendar>/<slug:category>/', views.event_list, name='list'),
 
     path('ical/<slug:cal_slug>/', views.sync_ical, name='as_ical'),
-    path('ical/<slug:cal_slug>/<slug:location>/', views.sync_ical, name='as_ical'),
-    path('ical/<slug:cal_slug>/<slug:location>/<int:alarm_time>/', views.sync_ical, name='as_ical'),
+    path('ical/<slug:cal_slug>/<int:alarm_time>/', views.sync_ical, name='as_ical'),
 
     path('loc_options/<slug:cal_slug>/', views.get_location_options),
     path('cat_options/<slug:cal_slug>/', views.get_category_options),

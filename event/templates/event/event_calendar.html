@@ -83,14 +83,7 @@ $(document).ready(function(){
 <input class="hidden" id="calendar_id" value="{{ calendar.slug }}">
 <div id='calendar'></div>
 
-{% if user.is_staff %}
-<a href="{% url 'event:edit' calendar.id %}" class="btn btn-success float-end"
-   style="margin-top: 1em;" title="{% trans 'edit' %}">
-    <i class="far fa-edit"></i>
-</a>
-{% endif %}
-
-<div class="row">
+<div class="row mt-3">
     <div class="col-lg-6">
         <table>
             <tbody>
@@ -107,19 +100,27 @@ $(document).ready(function(){
                         </div>
                     </td>
                     <td style="min-width: 8rem; text-align: center;">
-                        <a href="webcal://{{ request.get_host }}/event/ical/abfuhrkalender/{{ cal.slug }}/"
+                        <a href="webcal://{{ request.get_host }}/event/ical/{{ cal.slug }}/"
                            class="caldavlink">
                             <i class="fal fa-external-link"></i>
                             {% trans 'subscribe' %}
                         </a>
                     </td>
                     <td style="min-width: 8rem; text-align: center;">
-                        <a href="http://{{ request.get_host }}/event/ical/abfuhrkalender/{{ cal.slug }}/"
+                        <a href="http://{{ request.get_host }}/event/ical/{{ cal.slug }}/"
                            class="caldavlink">
                             <i class="fal fa-download"></i>
                             {% trans 'import' %}
                         </a>
                     </td>
+                    {% if user.is_staff %}
+                    <td>
+                        <a href="{% url 'event:edit' cal.id %}" class="btn-link float-end"
+                           title="{% trans 'edit' %}">
+                            <i class="far fa-edit"></i>
+                        </a>
+                    </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>

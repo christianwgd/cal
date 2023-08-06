@@ -29,17 +29,6 @@ class EventCalendarView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(EventCalendarView, self).get_context_data(**kwargs)
-        if 'calendar' in self.kwargs:
-            context['calendar'] = Calendar.objects.get(
-                slug=self.kwargs['calendar']
-            )
-        else:
-            try:
-                context['calendar'] = Calendar.objects.get(
-                    default=True
-                )
-            except Calendar.DoesNotExist:
-                context['calendar'] = Calendar.objects.first()
         context['calendars'] = Calendar.objects.all()
         return context
 
@@ -101,7 +90,7 @@ def events_as_json(request, calendar=None):
     return HttpResponse(json.dumps(cal))
 
 
-def sync_ical(request, cal_slug, location=None, alarm_time=None):
+def sync_ical(request, cal_slug, alarm_time=None):
 
     calendar = Calendar.objects.get(slug=cal_slug)
 
@@ -130,7 +119,7 @@ def sync_ical(request, cal_slug, location=None, alarm_time=None):
 
         cal_event.add('summary', event.category.name)
 
-        cal_event.add('location', event.location.name)
+        cal_event.add('location', event.calendar.street)
 
         cal_event.add('dtstamp', now)
         cal_event.add('sequence', '%d' % event.version)
