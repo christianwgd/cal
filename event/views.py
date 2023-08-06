@@ -104,10 +104,11 @@ def sync_ical(request, cal_slug, alarm_time=None):
     if alarm_time is None:
         alarm_time = 16
 
+    cal_name = _('Garbage collection')
     ical = iCalendar()
     ical.add('version', '2.0')
     ical.add('prodid', '-//%s//NONSGML Event Calendar//EN' % calendar.slug.upper())
-    ical.add('X-WR-CALNAME', calendar.name)
+    ical.add('X-WR-CALNAME', f'{cal_name} {calendar.name}')
     ical.add('X-WR-TIMEZONE', 'Europe/Berlin')
     ical.add('method', 'PUBLISH')
 
@@ -117,8 +118,7 @@ def sync_ical(request, cal_slug, alarm_time=None):
         cal_event.add('created', now)
         cal_event.add('dtstart', event.date)
 
-        name = _('Garbage collection')
-        cal_event.add('summary', f"{name} {event.category.name}")
+        cal_event.add('summary', event.category.name)
 
         cal_event.add('location', event.calendar.street)
 
