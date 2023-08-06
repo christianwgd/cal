@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
+from datetime import datetime, date
 
 import requests
 from django.conf import settings
@@ -191,16 +191,17 @@ class Calendar(models.Model):
 
     def update_events(self):
         events = call_api(f'strassen/{self.street.id}/termine')
+        first_of_year = date(now().year, 1, 1)
         for termin in events:
             if Category.objects.filter(id=termin['bezirk']['fraktionId']).exists():
                 category = Category.objects.get(id=termin['bezirk']['fraktionId'])
                 if category in self.categories.all():
-                    date = datetime.strptime(termin['datum'], '%Y-%m-%d')
-                    if date.date() > now().date():
+                    dt = datetime.strptime(termin['datum'], '%Y-%m-%d').date()
+                    if dt > first_of_year:
                         event, created = Event.objects.get_or_create(
                             id=termin['id'],
                             defaults={
-                                'date': date,
+                                'date': dt,
                                 'calendar': self,
                                 'category': category,
                                 'state': CONTENT_STATUS_PUBLISHED
@@ -208,8 +209,8 @@ class Calendar(models.Model):
                         )
                         if not created:
                             changed = False
-                            if event.date != date:
-                                event.date = date
+                            if event.date != dt:
+                                event.date = dt
                                 changed = True
                             if event.category != category:
                                 event.category = category
