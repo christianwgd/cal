@@ -16,7 +16,6 @@ urlpatterns = [
     path('ical/<slug:cal_slug>/', views.sync_ical, name='as_ical'),
     path('ical/<slug:cal_slug>/<int:alarm_time>/', views.sync_ical, name='as_ical'),
 
-    path('loc_options/<slug:cal_slug>/', views.get_location_options),
     path('cat_options/<slug:cal_slug>/', views.get_category_options),
 
     path('create/<slug:cal_slug>/<slug:cat_slug>/<str:dat_str>/', views.create_event),

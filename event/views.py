@@ -162,19 +162,6 @@ def event_list(request, calendar, category):
     return JsonResponse(jsn_events, safe=False)
 
 
-def get_location_options(request, cal_slug):
-
-    calendar = Calendar.objects.get(slug=cal_slug)
-    loc_options = []
-    for location in calendar.locations.all():
-        loc_options.append({
-            'value': location.slug,
-            'name': location.name
-        })
-
-    return JsonResponse(loc_options, safe=False)
-
-
 def get_category_options(request, cal_slug):
 
     calendar = Calendar.objects.get(slug=cal_slug)
