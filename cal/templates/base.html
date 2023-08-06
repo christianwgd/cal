@@ -42,37 +42,14 @@
 
     <div class="row">
         <div class="col-12">
-            <img src="{% static 'img/senden-logo.png' %}" class="float-end">
+            <a href="{% url 'home' %}" class="float-end">
+                <i class="far fa-home"></i>
+            </a>
             <h1 class="page_title">{% block page_title %}{% endblock %}</h1>
-
             <hr class="narrow" />
             {% bootstrap_messages %}
             {% block content %}{% endblock %}
         </div>
     </div>
-
-</div>
-<!-- END Content -->
-
-<!-- Footer -->
-<div class="container footer">
-    <div class="row">
-        <div class="col-12">
-            <hr/>
-        </div>
-        <div class="col-sm-6">
-            <p class="text-left">
-                <a href="{% url 'home' %}">
-                    <i class="far fa-home"></i>
-                </a>
-            </p>
-        </div>
-        <div class="col-sm-6">
-            <p class="text-right">
-            </p>
-        </div>
-    </div>
-</div>
-<!-- END Footer -->
 
 {% endblock %}
