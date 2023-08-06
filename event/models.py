@@ -88,12 +88,12 @@ class City(models.Model):
                 id=city['id'],
                 defaults={
                     'name': city['name'],
-                    'slug': slugify(city['name']),
+                    'slug': slugify(city['name'][:49]),
                 }
             )
             if not created:
                 location.name = city['name']
-                location.slug = slugify(location.name)
+                location.slug = slugify(location.name[:49])
                 location.save()
 
     def update_streets(self):
@@ -104,13 +104,13 @@ class City(models.Model):
                 id=street['id'],
                 defaults={
                     'name': street['name'],
-                    'slug': slugify(street['name']),
+                    'slug': slugify(street['name'][:49]),
                     'city': self
                 }
             )
             if not created:
                 location.name = street['name']
-                location.slug = slugify(location.name)
+                location.slug = slugify(location.name[:49])
                 location.city = self
                 location.save()
 
@@ -138,13 +138,13 @@ class Street(models.Model):
                 id=cat['id'],
                 defaults={
                     'name': cat['name'],
-                    'slug': slugify(cat['name']),
+                    'slug': slugify(cat['name'][:49]),
                     'bg_color': f"#{cat['farbeRgb']}"
                 }
             )
             if not created:
                 category.name = cat['name']
-                category.slug = slugify(category.name)
+                category.slug = slugify(category.name[:49])
                 category.bg_color = f"#{cat['farbeRgb']}"
                 category.color = category.get_color()
                 category.save()
