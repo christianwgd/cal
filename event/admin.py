@@ -2,7 +2,6 @@ from django.contrib import admin, messages
 from django.utils.translation import gettext_lazy as _
 
 from event.models import Event, Category, Calendar, City, Street
-from event.views import update_categories, update_streets, update_cities, update_events
 
 
 @admin.register(Category)
@@ -17,7 +16,8 @@ class StreetAdmin(admin.ModelAdmin):
 
     @admin.action(description=_("Update categories"))
     def action_update_categories(self, request, queryset=None):
-        update_categories()
+        street = queryset.first()
+        street.update_categories()
         messages.success(request, _('Categories updated.'))
 
     list_display = ['name', 'city']
@@ -31,13 +31,14 @@ class CityAdmin(admin.ModelAdmin):
 
     @admin.action(description=_("Update cities"))
     def action_update_cities(self, request, queryset):
-        update_cities()
+        city = queryset.first()
+        city.update_cities()
         messages.success(request, _('Cities updated.'))
 
     @admin.action(description=_("Update streets for selected city"))
     def action_update_streets(self, request, queryset):
         for city in queryset:
-            update_streets(city)
+            city.update_streets()
         messages.success(request, _('Streets updated.'))
 
     list_display = ['name', 'slug']
@@ -51,7 +52,7 @@ class CalendarAdmin(admin.ModelAdmin):
     @admin.action(description=_("Update events for selected calendars"))
     def action_update_events(self, request, queryset=None):
         for cal in queryset:
-            update_events(cal)
+            cal.update_events()
         messages.success(request, _('Events updated.'))
 
     list_display = ['name', 'slug', 'default']

@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+
+import requests
+from django.conf import settings
 from django.db import models
 from django.contrib import auth
+from django.utils.text import slugify
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from colorful.fields import RGBColorField
 from smart_selects.db_fields import ChainedForeignKey
@@ -14,6 +20,19 @@ CONTENT_STATUS_CHOICES = (
     (CONTENT_STATUS_DRAFT, _('Draft')),
     (CONTENT_STATUS_PUBLISHED, _('Published')),
 )
+
+
+def call_api(url):
+    base_url = getattr(settings, 'API_BASE_URL', None)
+    if not base_url:
+        msg = 'No API_BASE_URL configured!'
+        raise ImportError(msg)
+    url = base_url + url
+    r = requests.get(url, timeout=20)
+    if r.status_code == 200:
+        return r.json()
+    return None
+
 
 class Category(models.Model):
 
@@ -60,6 +79,41 @@ class City(models.Model):
     name = models.CharField(max_length=50, verbose_name=_('Name'))
     slug = models.SlugField(blank=True, null=True)
 
+    @staticmethod
+    def update_cities():
+        # https://coe-abfallapp.regioit.de/abfall-app-coe/rest/orte
+        cities = call_api('orte')
+        for city in cities:
+            location, created = City.objects.get_or_create(
+                id=city['id'],
+                defaults={
+                    'name': city['name'],
+                    'slug': slugify(city['name']),
+                }
+            )
+            if not created:
+                location.name = city['name']
+                location.slug = slugify(location.name)
+                location.save()
+
+    def update_streets(self):
+        # https://coe-abfallapp.regioit.de/abfall-app-coe/rest/orte/1216636/strassen
+        streets = call_api(f'orte/{self.id}/strassen')
+        for street in streets:
+            location, created = Street.objects.get_or_create(
+                id=street['id'],
+                defaults={
+                    'name': street['name'],
+                    'slug': slugify(street['name']),
+                    'city': self
+                }
+            )
+            if not created:
+                location.name = street['name']
+                location.slug = slugify(location.name)
+                location.city = self
+                location.save()
+
 
 class Street(models.Model):
 
@@ -69,11 +123,34 @@ class Street(models.Model):
         ordering = ['city', 'name']
 
     def __str__(self):
-        return f'{self.city}, {self.name}'
+        return f'{self.name}, {self.city}'
 
     name = models.CharField(max_length=50, verbose_name=_('Name'))
     slug = models.SlugField(blank=True, null=True)
     city = models.ForeignKey(City, verbose_name=_('City'), on_delete=models.CASCADE)
+
+    @staticmethod
+    def update_categories():
+        # https://coe-abfallapp.regioit.de/abfall-app-coe/rest/fraktionen
+        categories = call_api('fraktionen')
+        for cat in categories:
+            category, created = Category.objects.get_or_create(
+                id=cat['id'],
+                defaults={
+                    'name': cat['name'],
+                    'slug': slugify(cat['name']),
+                    'bg_color': f"#{cat['farbeRgb']}"
+                }
+            )
+            if not created:
+                category.name = cat['name']
+                category.slug = slugify(category.name)
+                category.bg_color = f"#{cat['farbeRgb']}"
+                category.color = category.get_color()
+                category.save()
+            else:
+                category.color = category.get_color()
+                category.save()
 
 
 class Calendar(models.Model):
@@ -110,6 +187,36 @@ class Calendar(models.Model):
     slug = models.SlugField(blank=True, null=True)
     default = models.BooleanField(default=False, verbose_name=_('Default'))
     owner = models.ForeignKey(User, verbose_name=_('Owner'), on_delete=models.CASCADE)
+    auto_update = models.BooleanField(default=False, verbose_name=_('Auto update calendar'))
+
+    def update_events(self):
+        events = call_api(f'strassen/{self.street.id}/termine')
+        for termin in events:
+            if Category.objects.filter(id=termin['bezirk']['fraktionId']).exists():
+                category = Category.objects.get(id=termin['bezirk']['fraktionId'])
+                if category in self.categories.all():
+                    date = datetime.strptime(termin['datum'], '%Y-%m-%d')
+                    if date.date() > now().date():
+                        event, created = Event.objects.get_or_create(
+                            id=termin['id'],
+                            defaults={
+                                'date': date,
+                                'calendar': self,
+                                'category': category,
+                                'state': CONTENT_STATUS_PUBLISHED
+                            }
+                        )
+                        if not created:
+                            changed = False
+                            if event.date != date:
+                                event.date = date
+                                changed = True
+                            if event.category != category:
+                                event.category = category
+                                changed = True
+                            if changed:
+                                event.version += 1
+                                event.save()
 
 
 class Event(models.Model):
