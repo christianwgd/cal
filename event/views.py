@@ -117,7 +117,8 @@ def sync_ical(request, cal_slug, alarm_time=None):
         cal_event.add('created', now)
         cal_event.add('dtstart', event.date)
 
-        cal_event.add('summary', event.category.name)
+        name = _('Garbage collection')
+        cal_event.add('summary', f"{name} {event.category.name}")
 
         cal_event.add('location', event.calendar.street)
 
