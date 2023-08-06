@@ -11,7 +11,6 @@
 <div class="modal-body">
     <form role="form" class="form-horizontal" method="post" novalidate>
         {% csrf_token %}
-        {% bootstrap_field form.location %}
         {% bootstrap_field form.category %}
         {% bootstrap_field form.date %}
         <button class="btn btn-primary" button_type='submit'>

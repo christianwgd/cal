@@ -1,5 +1,5 @@
 {% extends 'django_bootstrap5/bootstrap5.html' %}
-{% load django_bootstrap5 static i18n page_tags %}
+{% load django_bootstrap5 static i18n %}
 
 {% block bootstrap5_extra_head %}
 {{ block.super }}
@@ -69,7 +69,6 @@
         </div>
         <div class="col-sm-6">
             <p class="text-right">
-                {% bottom_menu %}
             </p>
         </div>
     </div>
