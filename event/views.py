@@ -28,7 +28,7 @@ class EventCalendarView(ListView):
     template_name = 'event/event_calendar.html'
 
     def get_context_data(self, **kwargs):
-        context = super(EventCalendarView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['calendars'] = Calendar.objects.all()
         return context
 

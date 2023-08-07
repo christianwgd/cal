@@ -1,8 +1,13 @@
+import datetime
+import json
+
 from django.test import TestCase
 from django.contrib import auth
+from django.urls import reverse
 from django.utils.text import slugify
+from django.utils.timezone import now
 
-from event.models import Category, City, Street, Calendar, Event
+from event.models import Category, City, Street, Calendar, Event, CONTENT_STATUS_PUBLISHED
 
 User = auth.get_user_model()
 
@@ -99,6 +104,7 @@ class CalendarTest(TestCase):
         self.street = Street.objects.create(id=1216830, name='Wienkamp', city=self.city)
         self.calendar = Calendar.objects.create(
             street=self.street,
+            slug=slugify(self.street),
             city=self.city,
             default=True,
             owner=User.objects.create(username='username')
@@ -114,3 +120,47 @@ class CalendarTest(TestCase):
         events = Event.objects.filter(calendar=self.calendar)
         self.assertTrue(events.count() > 0)
         self.assertTrue(events.first().category in self.calendar.categories.all())
+
+    def test_calendar_view(self):
+        response = self.client.get(reverse('event:calendar'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed('event/event_calendar.html')
+        self.assertQuerySetEqual(
+            response.context['calendars'],
+            Calendar.objects.all(),
+        )
+
+    def test_calendar_edit_get(self):
+        response = self.client.get(reverse('event:edit', kwargs={'pk': self.calendar.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed('event/event_edit.html')
+
+    def test_calendar_events_as_json(self):
+        category = Category.objects.create(
+            name='test',
+            bg_color='#000000',
+        )
+        category.color = category.get_color()
+        category.save()
+        self.calendar.categories.add(category)
+        year = now().year
+        month = now().month
+        event = Event.objects.create(
+            date = datetime.date(year, month, 15),
+            calendar=self.calendar,
+            category=category,
+            state=CONTENT_STATUS_PUBLISHED,
+            version=0
+        )
+        get_params = f'?start={year}-{month}-01&end={year}-{month}-28'
+        url = reverse('event:events') + get_params
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        d_resp = json.loads(response.content)
+        self.assertEqual(len(d_resp), 1)
+        elem = d_resp[0]
+        self.assertEqual(elem['title'], '$ICON test\nWienkamp, Senden, Senden')
+        self.assertEqual(elem['start'], event.date.strftime('%Y-%m-%d'))
+        self.assertEqual(elem['icon'], None)
+        self.assertEqual(elem['textColor'], '#ffffff')
+        self.assertEqual(elem['backgroundColor'], '#000000')
