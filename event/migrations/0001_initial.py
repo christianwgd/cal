@@ -4,7 +4,6 @@ import colorful.fields
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import smart_selects.db_fields
 
 
 class Migration(migrations.Migration):
@@ -104,6 +103,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='calendar',
             name='street',
-            field=smart_selects.db_fields.ChainedForeignKey(chained_field='city', chained_model_field='city', on_delete=django.db.models.deletion.CASCADE, to='event.street', verbose_name='Street'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='event.street', verbose_name='Street'),
         ),
     ]

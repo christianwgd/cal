@@ -9,7 +9,6 @@ from django.utils.text import slugify
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from colorful.fields import RGBColorField
-from smart_selects.db_fields import ChainedForeignKey
 
 User = auth.get_user_model()
 
@@ -176,9 +175,8 @@ class Calendar(models.Model):
 
     categories = models.ManyToManyField(Category, verbose_name=_('Categories'))
     city = models.ForeignKey(City, verbose_name=_('City'), on_delete=models.CASCADE)
-    street = ChainedForeignKey(
+    street = models.ForeignKey(
         Street, verbose_name=_('Street'), on_delete=models.CASCADE,
-        chained_field='city', chained_model_field='city',
     )
     icon = models.CharField(
         max_length=20, verbose_name=_('Icon'),

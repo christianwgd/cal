@@ -32,7 +32,6 @@ INSTALLED_APPS = [
     'colorful',
     'cal',
     'event.apps.EventConfig',
-    'smart_selects',
     'bootstrap_datepicker_plus',
     'bootstrap_modal_forms',
     'django_bootstrap5',
