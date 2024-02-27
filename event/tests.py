@@ -64,8 +64,8 @@ class CityTests(TestCase):
         streets = Street.objects.filter(city=self.city)
         self.assertTrue(streets.count() > 0)
         self.assertEqual(
-            streets.get(name='Wienkamp').slug,
-            slugify(streets.get(name='Wienkamp').name)
+            streets.filter(name='Wienkamp').first().slug,
+            slugify(streets.filter(name='Wienkamp').first().name)
         )
 
 
@@ -101,7 +101,7 @@ class CalendarTest(TestCase):
 
     def setUp(self):
         self.city = City.objects.create(id=1216636, name='Senden')
-        self.street = Street.objects.create(id=1216830, name='Wienkamp', city=self.city)
+        self.street = Street.objects.create(id=1314668, name='Wienkamp', city=self.city)
         self.calendar = Calendar.objects.create(
             street=self.street,
             slug=slugify(self.street),
