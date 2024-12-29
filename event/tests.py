@@ -40,18 +40,13 @@ class CategoryTestCase(TestCase):
 
 class CityTests(TestCase):
 
-    def setUp(self):
-        self.city = City.objects.create(
-            id=1216636,
-            name='Senden',
-            slug='senden',
-        )
-
     def test_city_str(self):
-        self.assertEqual(str(self.city), self.city.name)
+        City.update_cities()
+        city = City.objects.get(name='Senden')
+        self.assertEqual(str(city), city.name)
 
     def test_update_cities(self):
-        self.city.update_cities()
+        City.update_cities()
         cities = City.objects.all()
         self.assertTrue(cities.count() > 0)
         self.assertEqual(
@@ -60,8 +55,10 @@ class CityTests(TestCase):
         )
 
     def test_update_streets(self):
-        self.city.update_streets()
-        streets = Street.objects.filter(city=self.city)
+        City.update_cities()
+        city = City.objects.get(name='Senden')
+        city.update_streets()
+        streets = Street.objects.filter(city=city)
         self.assertTrue(streets.count() > 0)
         self.assertEqual(
             streets.filter(name='Wienkamp').first().slug,
@@ -72,17 +69,10 @@ class CityTests(TestCase):
 class StreetTests(TestCase):
 
     def setUp(self):
-        self.city = City.objects.create(
-            id=1216636,
-            name='Senden',
-            slug='senden',
-        )
-        self.street = Street.objects.create(
-            id=1216830,
-            name='Wienkamp',
-            slug='windkamp',
-            city=self.city,
-        )
+        City.update_cities()
+        self.city = City.objects.get(name='Senden')
+        self.city.update_streets()
+        self.street = Street.objects.get(name='Wienkamp')
 
     def test_street_str(self):
         self.assertEqual(str(self.street), f'{self.street.name}, {self.city.name}')
@@ -100,8 +90,10 @@ class StreetTests(TestCase):
 class CalendarTest(TestCase):
 
     def setUp(self):
-        self.city = City.objects.create(id=1216636, name='Senden')
-        self.street = Street.objects.create(id=1314668, name='Wienkamp', city=self.city)
+        City.update_cities()
+        self.city = City.objects.get(name='Senden')
+        self.city.update_streets()
+        self.street = Street.objects.get(name='Wienkamp')
         self.calendar = Calendar.objects.create(
             street=self.street,
             slug=slugify(self.street),
