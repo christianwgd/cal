@@ -199,9 +199,7 @@ class Calendar(models.Model):
                 category = Category.objects.get(item_id=termin['bezirk']['fraktionId'])
                 if category in self.categories.all():
                     dt = datetime.strptime(termin['datum'], '%Y-%m-%d').date()
-                    print(dt)
                     if dt > first_of_year:
-                        print('after first of year')
                         event, created = Event.objects.get_or_create(
                             date=dt,
                             category=category,
@@ -210,7 +208,6 @@ class Calendar(models.Model):
                                 'state': CONTENT_STATUS_PUBLISHED
                             }
                         )
-                        print(created)
                         if not created:
                             event.version += 1
                             event.save()

@@ -106,8 +106,9 @@ class CalendarTest(TestCase):
         self.assertEqual(str(self.calendar), self.calendar.name)
 
     def test_calendar_update_events(self):
+        self.city.update_streets()
         self.street.update_categories()
-        self.calendar.categories.add(Category.objects.get(id=6))
+        self.calendar.categories.add(Category.objects.get(slug='restmull-4-wo'))
         self.calendar.update_events()
         events = Event.objects.filter(calendar=self.calendar)
         self.assertTrue(events.count() > 0)
