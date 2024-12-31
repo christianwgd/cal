@@ -59,6 +59,7 @@ class Category(models.Model):
             self.color = self.get_color()
         super().save(*args, **kwargs)
 
+    item_id = models.BigIntegerField(blank=True, null=True, verbose_name=_('ID'))
     name = models.CharField(max_length=50, verbose_name=_('Name'))
     bg_color = RGBColorField(verbose_name=_('Background color'),blank=True, null=True)
     color = RGBColorField(verbose_name=_('Color'), blank=True, null=True)
@@ -75,6 +76,7 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
+    item_id = models.BigIntegerField(blank=True, null=True, verbose_name=_('ID'))
     name = models.CharField(max_length=50, verbose_name=_('Name'))
     slug = models.SlugField(blank=True, null=True)
 
@@ -84,25 +86,25 @@ class City(models.Model):
         cities = call_api('orte')
         for city in cities:
             location, created = City.objects.get_or_create(
-                id=city['id'],
+                name=city['name'],
                 defaults={
-                    'name': city['name'],
+                    'item_id': city['id'],
                     'slug': slugify(city['name'][:49]),
                 }
             )
             if not created:
-                location.name = city['name']
+                location.item_id = city['id']
                 location.slug = slugify(location.name[:49])
                 location.save()
 
     def update_streets(self):
-        # https://coe-abfallapp.regioit.de/abfall-app-coe/rest/orte/1216636/strassen
-        streets = call_api(f'orte/{self.id}/strassen')
+        # https://coe-abfallapp.regioit.de/abfall-app-coe/rest/orte/1505498/strassen
+        streets = call_api(f'orte/{self.item_id}/strassen')
         for street in streets:
             location, created = Street.objects.get_or_create(
-                id=street['id'],
+                name=street['name'],
                 defaults={
-                    'name': street['name'],
+                    'item_id': street['id'],
                     'slug': slugify(street['name'][:49]),
                     'city': self
                 }
@@ -124,6 +126,7 @@ class Street(models.Model):
     def __str__(self):
         return f'{self.name}, {self.city}'
 
+    item_id = models.BigIntegerField(blank=True, null=True, verbose_name=_('ID'))
     name = models.CharField(max_length=255, verbose_name=_('Name'))
     slug = models.SlugField(blank=True, null=True)
     city = models.ForeignKey(City, verbose_name=_('City'), on_delete=models.CASCADE)
@@ -134,15 +137,15 @@ class Street(models.Model):
         categories = call_api('fraktionen')
         for cat in categories:
             category, created = Category.objects.get_or_create(
-                id=cat['id'],
+                name=cat['name'],
                 defaults={
-                    'name': cat['name'],
+                    'item_id': cat['id'],
                     'slug': slugify(cat['name'][:49]),
                     'bg_color': f"#{cat['farbeRgb']}"
                 }
             )
             if not created:
-                category.name = cat['name']
+                category.item_id = cat['id']
                 category.slug = slugify(category.name[:49])
                 category.bg_color = f"#{cat['farbeRgb']}"
                 category.color = category.get_color()
@@ -188,34 +191,29 @@ class Calendar(models.Model):
     auto_update = models.BooleanField(default=False, verbose_name=_('Auto update calendar'))
 
     def update_events(self):
-        events = call_api(f'strassen/{self.street.id}/termine')
+        # https://coe-abfallapp.regioit.de/abfall-app-coe/rest/strassen/{street.id}/termine
+        events = call_api(f'strassen/{self.street.item_id}/termine')
         first_of_year = date(now().year, 1, 1)
         for termin in events:
-            if Category.objects.filter(id=termin['bezirk']['fraktionId']).exists():
-                category = Category.objects.get(id=termin['bezirk']['fraktionId'])
+            if Category.objects.filter(item_id=termin['bezirk']['fraktionId']).exists():
+                category = Category.objects.get(item_id=termin['bezirk']['fraktionId'])
                 if category in self.categories.all():
                     dt = datetime.strptime(termin['datum'], '%Y-%m-%d').date()
+                    print(dt)
                     if dt > first_of_year:
+                        print('after first of year')
                         event, created = Event.objects.get_or_create(
-                            id=termin['id'],
+                            date=dt,
+                            category=category,
                             defaults={
-                                'date': dt,
                                 'calendar': self,
-                                'category': category,
                                 'state': CONTENT_STATUS_PUBLISHED
                             }
                         )
+                        print(created)
                         if not created:
-                            changed = False
-                            if event.date != dt:
-                                event.date = dt
-                                changed = True
-                            if event.category != category:
-                                event.category = category
-                                changed = True
-                            if changed:
-                                event.version += 1
-                                event.save()
+                            event.version += 1
+                            event.save()
 
 
 class Event(models.Model):
