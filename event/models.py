@@ -9,9 +9,12 @@ from django.utils.text import slugify
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from colorful.fields import RGBColorField
+from icecream import ic
 
 User = auth.get_user_model()
 
+
+ic.disable()
 
 CONTENT_STATUS_DRAFT = 1
 CONTENT_STATUS_PUBLISHED = 2
@@ -23,10 +26,12 @@ CONTENT_STATUS_CHOICES = (
 
 def call_api(url):
     base_url = getattr(settings, 'API_BASE_URL', None)
+    ic(base_url)
     if not base_url:
         msg = 'No API_BASE_URL configured!'
         raise ImportError(msg)
     url = base_url + url
+    ic(url)
     r = requests.get(url, timeout=20)
     if r.status_code == 200:
         return r.json()
@@ -192,6 +197,7 @@ class Calendar(models.Model):
 
     def update_events(self):
         # https://coe-abfallapp.regioit.de/abfall-app-coe/rest/strassen/{street.id}/termine
+        ic('update events')
         events = call_api(f'strassen/{self.street.item_id}/termine')
         first_of_year = date(now().year, 1, 1)
         for termin in events:
@@ -200,6 +206,7 @@ class Calendar(models.Model):
                 if category in self.categories.all():
                     dt = datetime.strptime(termin['datum'], '%Y-%m-%d').date()
                     if dt > first_of_year:
+                        ic(dt, category)
                         event, created = Event.objects.get_or_create(
                             date=dt,
                             category=category,
