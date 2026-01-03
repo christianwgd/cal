@@ -103,7 +103,7 @@ class City(models.Model):
                 location.save()
 
     def update_streets(self):
-        # https://coe-abfallapp.regioit.de/abfall-app-coe/rest/orte/1505498/strassen
+        # https://coe-abfallapp.regioit.de/abfall-app-coe/rest/orte/1587284/strassen
         streets = call_api(f'orte/{self.item_id}/strassen')
         for street in streets:
             location, created = Street.objects.get_or_create(
