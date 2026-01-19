@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'colorful',
     'cal',
     'event.apps.EventConfig',
+    'dark_mode_switch',
     'bootstrap_modal_forms',
     'django_bootstrap5',
 ]
@@ -108,10 +109,6 @@ MEDIA_URL = '/media/'
 
 # Django3.2 change of pk fields
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-BOOTSTRAP5 = {
-    'theme_url': '/static/css/bootstrap.min.css',
-}
 
 #####################
 # CKEDITOR SETTINGS #

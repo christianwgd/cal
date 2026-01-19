@@ -1,13 +1,5 @@
 #id_content {
-    padding-top: 1rem;
-}
-
-a {
-    color: #999999;
-}
-
-a:hover {
-    color: #333333;
+    padding-top: 0;
 }
 
 .footer a {

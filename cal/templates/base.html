@@ -5,8 +5,7 @@
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'font-awesome-5/css/all.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" >
-
-<script defer src="{% static 'font-awesome-5/js/all.min.js' %}"></script>
+<link href="{% static 'dark_mode_switch/dark-mode-switch.css' %}" rel="stylesheet" type="text/css">
 
 <link rel="apple-touch-icon" sizes="57x57" href="{% static 'icons/apple-icon-57x57.png' %}">
 <link rel="apple-touch-icon" sizes="60x60" href="{% static 'icons/apple-icon-60x60.png' %}">
@@ -29,7 +28,9 @@
 
 {% block bootstrap5_extra_script %}
 {{ block.super }}
+<script defer src="{% static 'font-awesome-5/js/all.min.js' %}"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="{% static 'dark_mode_switch/dark-mode-switch.js' %}"></script>
 {% endblock %}
 
 {% block bootstrap5_title %}{% endblock %}
@@ -37,16 +38,36 @@
 
 {% block bootstrap5_content %}
 
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <h1>Abfuhrkalender</h1>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                {% include 'dark_mode_switch/dark_mode_switch.html' %}
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        <i class="far fa-home"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
 <!-- Content -->
 <div class="container" id="id_content">
 
     <div class="row">
         <div class="col-12">
-            <a href="{% url 'home' %}" class="float-end">
-                <i class="far fa-home"></i>
-            </a>
-            <h1 class="page_title">{% block page_title %}{% endblock %}</h1>
-            <hr class="narrow" />
             {% bootstrap_messages %}
             {% block content %}{% endblock %}
         </div>

@@ -1,5 +1,6 @@
 Django==6.0.1
 django-bootstrap5==26.1
+django-bootstrap5-dark-mode-switch==0.2.2
 django-bootstrap-modal-forms==3.0.5
 django-smart-selects==1.7.2
 django-colorful==1.3

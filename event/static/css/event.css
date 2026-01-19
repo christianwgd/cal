@@ -2,14 +2,6 @@
     display: none;
 }
 
-a {
-    color: #999999;
-}
-
-a:hover {
-    color: #333333;
-}
-
 #updateModal {
     margin-top: 100px;
 }
