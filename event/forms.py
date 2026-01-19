@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
-from bootstrap_datepicker_plus.widgets import DatePickerInput
 from bootstrap_modal_forms.forms import BSModalModelForm
-from django.conf import settings
-from django.forms import ModelForm
+from django.forms import ModelForm, DateInput
 
 from event.models import Event
-
-lang = getattr(settings, "LANGUAGE_CODE", 'de')
 
 
 class EventForm(ModelForm):
@@ -15,10 +11,7 @@ class EventForm(ModelForm):
         model = Event
         exclude = ['version', 'state', 'calendar']
         widgets = {
-            'date': DatePickerInput(options={
-                "format": "DD.MM.YYYY",
-                "locale": lang
-            }),
+            'date': DateInput(attrs={'type': 'date'},),
         }
 
     def __init__(self, *args, **kwargs):
@@ -35,8 +28,5 @@ class EventUpdateForm(BSModalModelForm):
         model = Event
         exclude = ['version', 'state', 'calendar']
         widgets = {
-            'date': DatePickerInput(options={
-                "format": "DD.MM.YYYY",
-                "locale": lang
-            }),
+            'date': DateInput(attrs={'type': 'date'},),
         }

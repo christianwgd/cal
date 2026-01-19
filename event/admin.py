@@ -7,7 +7,7 @@ from event.models import Event, Category, Calendar, City, Street
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
 
-    list_display = ['name']
+    list_display = ['item_id', 'name']
     search_fields = ['name']
 
 
