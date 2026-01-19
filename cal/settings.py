@@ -10,12 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-import os
+import sys
+from pathlib import Path
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
-PROJECT_APP = os.path.basename(PROJECT_APP_PATH)
+BASE_DIR = Path(Path(Path(__file__).resolve()).parent).parent
+PROJECT_APP_PATH = Path(Path(__file__).resolve()).parent
+PROJECT_APP = Path(PROJECT_APP_PATH).name
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -99,9 +101,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
 # Django3.2 change of pk fields
@@ -152,13 +154,14 @@ USE_DJANGO_JQUERY = True
 # local_settings has full access to everything defined in this module.
 # Also force into sys.modules so it's visible to Django's autoreload.
 
-f = os.path.join(PROJECT_APP_PATH, "localsettings.py")
-if os.path.exists(f):
-    import sys
+f = Path(PROJECT_APP_PATH) / "localsettings.py"
+if Path.exists(f):
     import importlib
-    module_name = "%s.localsettings" % PROJECT_APP
+    module_name = f"{PROJECT_APP}.localsettings"
     module = importlib.import_module(module_name)
     module.__file__ = f
     sys.modules[module_name] = module
-    exec(open(f, "rb").read())  # noqa: S102
+    with Path.open(f, "rb") as settings_file:
+        exec(settings_file.read())  # noqa: S102
+        settings_file.close()
 

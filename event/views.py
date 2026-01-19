@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import json
 import datetime
 
@@ -51,7 +50,7 @@ class CalendarEdit(UpdateView):
         return initial
 
     def get_form_kwargs(self, *args, **kwargs):
-        form_kwargs = super(CalendarEdit, self).get_form_kwargs()
+        form_kwargs = super().get_form_kwargs()
         form_kwargs['calendar'] = self.object
         return form_kwargs
 
@@ -76,9 +75,7 @@ def events_as_json(request, calendar=None):
         ).order_by('date')
     for event in events:
         cal_item = {
-            'title': '$ICON {}\n{}, {}'.format(
-                event.category.name, event.calendar.street, event.calendar.street.city
-            ),
+            'title': f'$ICON {event.category.name}\n{event.calendar.street}, {event.calendar.street.city}',
             'start': formats.date_format(event.date, 'Y-m-d'),
             'icon': event.calendar.icon,
             'textColor': event.category.color,
@@ -107,14 +104,14 @@ def sync_ical(request, cal_slug, alarm_time=None):
     cal_name = _('Garbage collection')
     ical = iCalendar()
     ical.add('version', '2.0')
-    ical.add('prodid', '-//%s//NONSGML Event Calendar//EN' % calendar.slug.upper())
+    ical.add('prodid', f'-//{calendar.slug.upper()}//NONSGML Event Calendar//EN')
     ical.add('X-WR-CALNAME', f'{cal_name} {calendar.name}')
     ical.add('X-WR-TIMEZONE', 'Europe/Berlin')
     ical.add('method', 'PUBLISH')
 
     for event in events:
         cal_event = icalEvent()
-        cal_event.add('uid', '%s-SNDN-0000-0000-%012d' % (calendar.slug.upper(), event.id))
+        cal_event.add('uid', f'{calendar.slug.upper()}-SNDN-0000-0000-{str(event.id).zfill(12)}')
         cal_event.add('created', now)
         cal_event.add('dtstart', event.date)
 
@@ -123,22 +120,19 @@ def sync_ical(request, cal_slug, alarm_time=None):
         cal_event.add('location', event.calendar.street)
 
         cal_event.add('dtstamp', now)
-        cal_event.add('sequence', '%d' % event.version)
+        cal_event.add('sequence', f'{event.version:d}')
 
         alarm = Alarm()
-        alarm.add('trigger', vText('-PT{}H'.format(alarm_time)))
+        alarm.add('trigger', vText(f'-PT{alarm_time}H'))
         alarm.add('action', 'DISPLAY')
-        alarm.add('description', '{calname}: {catname}'.format(
-            calname = event.calendar.name,
-            catname = event.category.name
-        ))
+        alarm.add('description', f'{event.calendar.name}: {event.category.name}')
         cal_event.add_component(alarm)
 
         ical.add_component(cal_event)
     # end for
 
     response = HttpResponse(ical.to_ical(), content_type="text/calendar, text/x-vcalendar, application/hbs-vcs")
-    response['Content-Disposition'] = 'attachment; filename="{}.ics"'.format(calendar.slug)
+    response['Content-Disposition'] = f'attachment; filename="{calendar.slug}.ics"'
     return response
 
 

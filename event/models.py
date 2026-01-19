@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime, date
 
 import requests
@@ -175,7 +174,7 @@ class Calendar(models.Model):
                 Calendar.objects.exclude(pk=self.id).update(default=False)
             else:
                 Calendar.objects.all().update(default=False)
-        super(Calendar, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     @property
     def name(self):
@@ -227,12 +226,7 @@ class Event(models.Model):
         verbose_name_plural = _('Events')
 
     def __str__(self):
-        return '{date}-{vers}: {cal} - {cat}'.format(
-            cal = self.calendar,
-            cat = self.category,
-            date = self.date,
-            vers = self.version
-        )
+        return f'{self.date}-{self.version}: {self.calendar} - {self.category}'
 
     def save(self, *args, **kwargs):
         if self.version:

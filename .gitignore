@@ -181,3 +181,6 @@ fixtures/
 
 # ruff cache
 .ruff_cache/
+
+# coverage
+htmlcove/
