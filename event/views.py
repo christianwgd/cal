@@ -171,7 +171,7 @@ def get_category_options(request, cal_slug):
 
 
 def create_event(request, cal_slug, cat_slug, dat_str):
-    date = datetime.datetime.strptime(dat_str, '%d.%m.%Y')
+    date = datetime.datetime.strptime(dat_str, '%Y-%m-%d')
     calendar = Calendar.objects.get(slug=cal_slug)
     category = Category.objects.get(slug=cat_slug)
     Event.objects.create(
